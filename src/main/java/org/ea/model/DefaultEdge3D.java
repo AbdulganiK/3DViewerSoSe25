@@ -1,6 +1,6 @@
 package org.ea.model;
 
-public class LineSegment3D  implements Edge3D{
+public class DefaultEdge3D implements Edge3D{
     private Vertex3D startVertex;
     private Vertex3D endVertex;
 

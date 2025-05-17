@@ -1,6 +1,18 @@
 package org.ea.model;
 
+import java.util.List;
+import java.util.Set;
+
 public class Polyhedron implements SolidGeometry{
+
+    private List<Vertex3D> vertices;
+    private List<AbstractPolygon> surfaces;
+    private List<Edge3D> edges;
+
+    public  Polyhedron(List<AbstractPolygon> surfaces) {
+
+    }
+
     @Override
     public double getVolume() {
         return 0;

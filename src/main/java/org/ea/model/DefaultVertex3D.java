@@ -1,6 +1,6 @@
 package org.ea.model;
 
-public class Point3D implements Vertex3D {
+public class DefaultVertex3D implements Vertex3D {
     private float x;
     private float y;
     private float z;
