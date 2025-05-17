@@ -6,6 +6,7 @@ public interface Edge3D {
     Vector3D getDirection();
     double getLength();
     default boolean equals(Edge3D other) {
+        if (other == null) return false;
         return getStart().equals(other.getStart()) && getEnd().equals(other.getEnd());
     }
 }

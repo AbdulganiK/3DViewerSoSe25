@@ -5,6 +5,12 @@ public class DefaultVertex3D implements Vertex3D {
     private float y;
     private float z;
 
+    public DefaultVertex3D(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
     @Override
     public float getX() {
         return this.x;

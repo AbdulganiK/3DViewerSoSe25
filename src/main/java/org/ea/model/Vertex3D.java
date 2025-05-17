@@ -10,6 +10,7 @@ public interface Vertex3D {
     public Vector3D subtract(Vertex3D other);
 
     default boolean equals(Vertex3D other) {
+        if (other == null) return false;
         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
     }
 }

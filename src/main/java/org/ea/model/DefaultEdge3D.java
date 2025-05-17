@@ -4,6 +4,12 @@ public class DefaultEdge3D implements Edge3D{
     private Vertex3D startVertex;
     private Vertex3D endVertex;
 
+
+    public DefaultEdge3D(Vertex3D startVertex, Vertex3D endVertex) {
+        this.startVertex = startVertex;
+        this.endVertex = endVertex;
+    }
+
     @Override
     public Vertex3D getStart() {
         return this.startVertex;
@@ -23,4 +29,5 @@ public class DefaultEdge3D implements Edge3D{
     public double getLength() {
         return this.getDirection().length();
     }
+
 }
