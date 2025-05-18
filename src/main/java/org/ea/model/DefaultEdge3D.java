@@ -1,5 +1,7 @@
 package org.ea.model;
 
+import java.util.Objects;
+
 public class DefaultEdge3D implements Edge3D{
     private Vertex3D startVertex;
     private Vertex3D endVertex;
@@ -30,4 +32,15 @@ public class DefaultEdge3D implements Edge3D{
         return this.getDirection().length();
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(startVertex, endVertex);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Edge3D other)) return false;
+        return Edge3D.super.equals(other);
+    }
 }

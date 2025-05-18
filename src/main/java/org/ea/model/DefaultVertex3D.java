@@ -1,5 +1,7 @@
 package org.ea.model;
 
+import java.util.Objects;
+
 public class DefaultVertex3D implements Vertex3D {
     private float x;
     private float y;
@@ -31,5 +33,16 @@ public class DefaultVertex3D implements Vertex3D {
         return new DefaultVector3D(other.getX() - this.getX(), other.getY() - this.getY(), other.getZ() - this.getZ());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y, z);
+    }
 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof Vertex3D other)) return false;
+        return Vertex3D.super.equals(other);
+    }
 }

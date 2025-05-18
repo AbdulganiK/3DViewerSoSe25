@@ -28,7 +28,5 @@ public class Main {
         Triangle triangle = new Triangle(edges);
         System.out.println(triangle.getPerimeter());
 
-
-
     }
 }

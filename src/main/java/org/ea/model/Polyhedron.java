@@ -7,13 +7,14 @@ import java.util.stream.Collectors;
 public class Polyhedron implements SolidGeometry{
 
     private List<Vertex3D> vertices = new ArrayList<>();
-    private List<AbstractPolygon> surfaces = new ArrayList<>();
+    private List<Triangle> surfaces = new ArrayList<>();
     private List<Edge3D> edges = new ArrayList<>();
 
-    public Polyhedron(List<AbstractPolygon> surfaces) {
-        // collect edges
-        for (AbstractPolygon surface : surfaces) {
+    public Polyhedron(List<Triangle> surfaces) {
+        // collect edges and vertices
+        for (Triangle surface : surfaces) {
             this.edges.addAll(surface.getEdges());
+            this.vertices.addAll(surface.getVertices());
         }
         Map<Edge3D, Long> occurrences = this.edges.stream()
                 .collect(Collectors.groupingBy(
@@ -27,18 +28,23 @@ public class Polyhedron implements SolidGeometry{
                 throw new RuntimeException("Kein geschlossenes Polygon");
             }
         }
-
-        // removing duplicate Edges
+        this.surfaces = surfaces;
+        // removing duplicate edges
         this.edges = this.edges.stream().distinct().toList();
-        // collect Vertices
-        System.out.println(this.edges);
+        // remove duplicate vertices
+        this.vertices = this.vertices.stream().distinct().toList();
         // check for euler
+        //todo
 
     }
 
     @Override
     public double getVolume() {
-        return 0;
+        float volume = 0f;
+        for (Triangle surface : surfaces) {
+            volume += (float) 1 /6 * surface.getVertexA().subtract(GeometricConstants.ORIGIN).dotProduct(surface.getVertexB().subtract(GeometricConstants.ORIGIN).crossProduct(surface.getVertexC().subtract(GeometricConstants.ORIGIN)));
+        }
+        return volume;
     }
 
     @Override
