@@ -20,7 +20,8 @@ public class Polyhedron implements SolidGeometry{
                         Function.identity(),          // Gruppiere nach dem Element selbst
                         Collectors.counting()         // Zähle die Elemente in jeder Gruppe
                 ));
-
+        // if the edges doesnt occur twice
+        // the shape cannot be a closed Polyhedron
         for (Long value : occurrences.values()) {
             if (value < 2) {
                 throw new RuntimeException("Kein geschlossenes Polygon");
