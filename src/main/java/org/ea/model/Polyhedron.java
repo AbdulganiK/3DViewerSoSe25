@@ -62,11 +62,6 @@ public class Polyhedron implements SolidGeometry{
     }
 
     @Override
-    public double getPerimeter() {
-        return 0;
-    }
-
-    @Override
     public Vector3D getPosition() {
         return null;
     }
