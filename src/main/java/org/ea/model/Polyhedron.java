@@ -34,7 +34,9 @@ public class Polyhedron implements SolidGeometry{
         // remove duplicate vertices
         this.vertices = this.vertices.stream().distinct().toList();
         // check for euler
-        //todo
+        if (this.vertices.size() - this.edges.size() + this.surfaces.size() != 2) {
+            throw new RuntimeException("Eulercharakteristik nicht erfüllt!");
+        }
 
     }
 
@@ -42,14 +44,21 @@ public class Polyhedron implements SolidGeometry{
     public double getVolume() {
         float volume = 0f;
         for (Triangle surface : surfaces) {
-            volume += (float) 1 /6 * surface.getVertexA().subtract(GeometricConstants.ORIGIN).dotProduct(surface.getVertexB().subtract(GeometricConstants.ORIGIN).crossProduct(surface.getVertexC().subtract(GeometricConstants.ORIGIN)));
+            Vector3D originA = surface.getVertexA().subtract(GeometricConstants.ORIGIN);
+            Vector3D originB = surface.getVertexB().subtract(GeometricConstants.ORIGIN);
+            Vector3D originC = surface.getVertexC().subtract(GeometricConstants.ORIGIN);
+            volume += (float) 1/6 * originA.dotProduct(originB.crossProduct(originC));
         }
-        return volume;
+        return Math.abs(volume);
     }
 
     @Override
     public double getArea() {
-        return 0;
+        double area = 0;
+        for (Triangle surface : this.surfaces) {
+            area += surface.getArea();
+        }
+        return area;
     }
 
     @Override

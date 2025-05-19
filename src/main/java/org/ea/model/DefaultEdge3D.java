@@ -34,9 +34,9 @@ public class DefaultEdge3D implements Edge3D{
 
     @Override
     public int hashCode() {
-        return Objects.hash(startVertex, endVertex);
+        // commutativ: A^B == B^A
+        return startVertex.hashCode() ^ endVertex.hashCode();
     }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;

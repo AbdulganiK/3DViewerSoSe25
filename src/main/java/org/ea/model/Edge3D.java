@@ -7,6 +7,7 @@ public interface Edge3D {
     double getLength();
     default boolean equals(Edge3D other) {
         if (other == null) return false;
-        return getStart().equals(other.getStart()) && getEnd().equals(other.getEnd());
+        return (getStart().equals(other.getStart()) && getEnd().equals(other.getEnd())) ||
+                (getStart().equals(other.getEnd()) && getEnd().equals(other.getStart()));
     }
 }

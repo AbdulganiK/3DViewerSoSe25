@@ -30,7 +30,11 @@ public class DefaultVertex3D implements Vertex3D {
 
     @Override
     public Vector3D subtract(Vertex3D other) {
-        return new DefaultVector3D(other.getX() - this.getX(), other.getY() - this.getY(), other.getZ() - this.getZ());
+        return new DefaultVector3D(
+                this.getX() - other.getX(),  // Korrekt: this - other
+                this.getY() - other.getY(),
+                this.getZ() - other.getZ()
+        );
     }
 
     @Override

@@ -1,6 +1,6 @@
 package org.ea.model;
 
-public interface SolidGeometry extends SurfaceGeometry {
+public interface SolidGeometry extends Geometry {
     double getVolume();
 
     Geometry translate(Vector3D translation);

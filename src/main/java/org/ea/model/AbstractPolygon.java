@@ -9,7 +9,7 @@ import java.util.List;
 
 public abstract class AbstractPolygon implements SurfaceGeometry {
     List<Edge3D> edges;
-    List<Vertex3D> vertices;
+    List<Vertex3D> vertices = new ArrayList<>();
     public AbstractPolygon(List<Edge3D> edges) {
         if (edges.size() < 3) {
             throw new RuntimeException();
