@@ -10,9 +10,9 @@ public class Polyhedron implements SolidGeometry{
     private List<Triangle> surfaces = new ArrayList<>();
     private List<Edge3D> edges = new ArrayList<>();
 
-    public Polyhedron(List<Triangle> surfaces) {
+    public Polyhedron(Polygon[] surfaces) {
         // collect edges and vertices
-        for (Triangle surface : surfaces) {
+        for (Polygon surface : surfaces) {
             this.edges.addAll(surface.getEdges());
             this.vertices.addAll(surface.getVertices());
         }
