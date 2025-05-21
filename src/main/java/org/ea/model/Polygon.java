@@ -1,16 +1,13 @@
 package org.ea.model;
 
 
-import javafx.print.Collation;
-
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
-public abstract class AbstractPolygon implements SurfaceGeometry {
+public abstract class Polygon implements SurfaceGeometry {
     List<Edge3D> edges;
     List<Vertex3D> vertices = new ArrayList<>();
-    public AbstractPolygon(List<Edge3D> edges) {
+    public Polygon(List<Edge3D> edges) {
         if (edges.size() < 3) {
             throw new RuntimeException();
         }

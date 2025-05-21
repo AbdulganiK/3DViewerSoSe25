@@ -2,7 +2,7 @@ package org.ea.model;
 
 import java.util.*;
 
-public class Triangle extends AbstractPolygon{
+public class Triangle extends Polygon {
 
     private Edge3D edgeA;
     private Edge3D edgeB;
