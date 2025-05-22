@@ -4,7 +4,7 @@ import org.ea.utiltities.GeometryUtils;
 
 import java.util.LinkedHashSet;
 
-public class Polyline implements GeometryUtils {
+public class Polyline {
     private final Edge3D[] edges;
     private final Vertex3D[] vertices;
 
