@@ -3,8 +3,8 @@ package org.ea.model;
 import java.util.Objects;
 
 public class DefaultEdge3D implements Edge3D{
-    private Vertex3D startVertex;
-    private Vertex3D endVertex;
+    private final Vertex3D startVertex;
+    private final Vertex3D endVertex;
 
 
     public DefaultEdge3D(Vertex3D startVertex, Vertex3D endVertex) {
@@ -24,7 +24,7 @@ public class DefaultEdge3D implements Edge3D{
 
     @Override
     public Vector3D getDirection() {
-        return this.startVertex.subtract(this.endVertex);
+        return this.getStart().subtract(this.getEnd());
     }
 
     @Override

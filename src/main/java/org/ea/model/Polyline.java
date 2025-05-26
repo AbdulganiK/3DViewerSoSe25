@@ -4,14 +4,14 @@ import org.ea.utiltities.GeometryUtils;
 
 import java.util.LinkedHashSet;
 
-public class Polyline implements GeometryUtils {
+public class Polyline {
     private final Edge3D[] edges;
     private final Vertex3D[] vertices;
 
     public Polyline(Edge3D[] edges) {
         if (!areEdgesConnected(edges)) throw new RuntimeException(ExceptionMessages.EDGES_NOT_CONNECTED);
         this.edges = edges;
-        this.vertices = removeDuplicateVertices(collectVerticesFromEdges(edges));
+        this.vertices = GeometryUtils.removeDuplicates(GeometryUtils.collectVerticesFromEdges(edges), Vertex3D[]::new);
     }
 
     private boolean areEdgesConnected(Edge3D[] edges) {
