@@ -2,8 +2,6 @@ package org.ea.model;
 import org.ea.utiltities.GeometryUtils;
 
 
-import java.util.LinkedHashSet;
-
 public class Polyline {
     private final Edge3D[] edges;
     private final Vertex3D[] vertices;
