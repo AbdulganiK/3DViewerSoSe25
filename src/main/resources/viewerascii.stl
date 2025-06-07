@@ -1,0 +1,86 @@
+solid 
+facet normal 0 0 1
+ outer loop
+  vertex -0.21933913 -0.25913596 2.2182107
+  vertex -2.2193391 -0.25913596 2.2182107
+  vertex -2.2193391 -2.259136 2.2182107
+ endloop
+endfacet
+facet normal 0 -0 1
+ outer loop
+  vertex -0.21933913 -0.25913596 2.2182107
+  vertex -2.2193391 -2.259136 2.2182107
+  vertex -0.21933913 -2.259136 2.2182107
+ endloop
+endfacet
+facet normal 0 -1 0
+ outer loop
+  vertex -0.21933913 -2.259136 0.2182107
+  vertex -0.21933913 -2.259136 2.2182107
+  vertex -2.2193391 -2.259136 2.2182107
+ endloop
+endfacet
+facet normal 0 -1 0
+ outer loop
+  vertex -0.21933913 -2.259136 0.2182107
+  vertex -2.2193391 -2.259136 2.2182107
+  vertex -2.2193391 -2.259136 0.2182107
+ endloop
+endfacet
+facet normal -1 -0 -0
+ outer loop
+  vertex -2.2193391 -2.259136 0.2182107
+  vertex -2.2193391 -2.259136 2.2182107
+  vertex -2.2193391 -0.25913596 2.2182107
+ endloop
+endfacet
+facet normal -1 -0 0
+ outer loop
+  vertex -2.2193391 -2.259136 0.2182107
+  vertex -2.2193391 -0.25913596 2.2182107
+  vertex -2.2193391 -0.25913596 0.2182107
+ endloop
+endfacet
+facet normal 0 0 -1
+ outer loop
+  vertex -2.2193391 -0.25913596 0.2182107
+  vertex -0.21933913 -0.25913596 0.2182107
+  vertex -0.21933913 -2.259136 0.2182107
+ endloop
+endfacet
+facet normal 0 0 -1
+ outer loop
+  vertex -2.2193391 -0.25913596 0.2182107
+  vertex -0.21933913 -2.259136 0.2182107
+  vertex -2.2193391 -2.259136 0.2182107
+ endloop
+endfacet
+facet normal 1 -0 0
+ outer loop
+  vertex -0.21933913 -0.25913596 0.2182107
+  vertex -0.21933913 -0.25913596 2.2182107
+  vertex -0.21933913 -2.259136 2.2182107
+ endloop
+endfacet
+facet normal 1 -0 0
+ outer loop
+  vertex -0.21933913 -0.25913596 0.2182107
+  vertex -0.21933913 -2.259136 2.2182107
+  vertex -0.21933913 -2.259136 0.2182107
+ endloop
+endfacet
+facet normal 0 1 0
+ outer loop
+  vertex -2.2193391 -0.25913596 0.2182107
+  vertex -2.2193391 -0.25913596 2.2182107
+  vertex -0.21933913 -0.25913596 2.2182107
+ endloop
+endfacet
+facet normal 0 1 -0
+ outer loop
+  vertex -2.2193391 -0.25913596 0.2182107
+  vertex -0.21933913 -0.25913596 2.2182107
+  vertex -0.21933913 -0.25913596 0.2182107
+ endloop
+endfacet
+endsolid 

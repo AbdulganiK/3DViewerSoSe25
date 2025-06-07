@@ -10,7 +10,6 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        STLReader stlReader = new STLAsciiReader(new File("src/main/resources/3dviewertest.stl"));
-        System.out.println(stlReader.readHeader());
+        STLReader stlReader = new STLByteReader(new File("src/main/resources/GOKU.stl"));
     }
 }

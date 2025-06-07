@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface STLReader {
     public <T> List<T> readHeader() throws IOException;
-    public <T> List<T> readTriangles();
+    public <T> List<T> readTriangles() throws IOException;
     default boolean isNotSTLFile(String fileName) {
         return !fileName.endsWith(FileExtensions.STL);
     }

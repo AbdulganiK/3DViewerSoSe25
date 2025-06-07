@@ -3,10 +3,12 @@ package org.ea.model;
 import org.ea.constant.GeometricConstants;
 
 public class Triangle extends Polygon {
+    private Vector normal;
+
     public Triangle(Edge3D[] edges) {
         super(edges);
         if (edges.length != GeometricConstants.TRIANGLE_VERTICES_AMOUNT) {
-            throw new RuntimeException("A triangle must have 3 Vertices!");
+            throw new RuntimeException("A triangle must have 3 Edges!");
         }
 
     }
