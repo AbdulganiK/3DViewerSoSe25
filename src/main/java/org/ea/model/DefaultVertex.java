@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * A default implementation of a vertex in 3D space.
  */
-public class DefaultVertex3D implements Vertex3D {
+public class DefaultVertex implements Vertex {
     private float x;
     private float y;
     private float z;
@@ -19,7 +19,7 @@ public class DefaultVertex3D implements Vertex3D {
      * @precondition none
      * @postcondition A new {@code DefaultVertex3D} is created with the given coordinates
      */
-    public DefaultVertex3D(float x, float y, float z) {
+    public DefaultVertex(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -70,8 +70,8 @@ public class DefaultVertex3D implements Vertex3D {
      * @postcondition A new vector is returned pointing from {@code other} to {@code this}
      */
     @Override
-    public Vector3D subtract(Vertex3D other) {
-        return new DefaultVector3D(
+    public Vector subtract(Vertex other) {
+        return new DefaultVector(
                 this.getX() - other.getX(),
                 this.getY() - other.getY(),
                 this.getZ() - other.getZ()
@@ -101,7 +101,7 @@ public class DefaultVertex3D implements Vertex3D {
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
-        if (!(obj instanceof Vertex3D other)) return false;
-        return Vertex3D.super.equals(other);
+        if (!(obj instanceof Vertex other)) return false;
+        return Vertex.super.equals(other);
     }
 }

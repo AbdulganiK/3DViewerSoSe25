@@ -7,7 +7,7 @@ import org.ea.utiltities.GeometryUtils;
  */
 public class Polyline {
     private final Edge3D[] edges;
-    private final Vertex3D[] vertices;
+    private final Vertex[] vertices;
 
     /**
      * Constructs a polyline from an array of connected edges.
@@ -25,7 +25,7 @@ public class Polyline {
         this.edges = edges;
         this.vertices = GeometryUtils.removeDuplicates(
                 GeometryUtils.collectVerticesFromEdges(edges),
-                Vertex3D[]::new
+                Vertex[]::new
         );
     }
 
@@ -66,7 +66,7 @@ public class Polyline {
      * @precondition none
      * @postcondition Returns a deduplicated, ordered array of vertices
      */
-    public Vertex3D[] getVertices() {
+    public Vertex[] getVertices() {
         return this.vertices;
     }
 }

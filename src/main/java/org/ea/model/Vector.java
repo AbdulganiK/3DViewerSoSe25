@@ -1,16 +1,16 @@
 package org.ea.model;
 
-public interface Vector3D {
+public interface Vector {
     int SECOND_POWER = 2;
     Float getX();
     Float getY();
     Float getZ();
-    Vector3D crossProduct(Vector3D other);
+    Vector crossProduct(Vector other);
     default double length() {
         return Math.sqrt(Math.pow(getX(), SECOND_POWER) + Math.pow(getY(), SECOND_POWER) + Math.pow(getZ(), SECOND_POWER));
     }
 
-    default double angleBetween(Vector3D other) {
+    default double angleBetween(Vector other) {
         // Skalarprodukt berechnen
         double dot = dotProduct(other);
 
@@ -28,7 +28,7 @@ public interface Vector3D {
         // Arcus-Cosinus liefert den Winkel in Radiant
         return Math.acos(cosTheta);
     }
-    default float dotProduct(Vector3D other){
+    default float dotProduct(Vector other){
         return getX() * other.getX() + getY() * other.getY() + getZ() * other.getZ();
     }
 

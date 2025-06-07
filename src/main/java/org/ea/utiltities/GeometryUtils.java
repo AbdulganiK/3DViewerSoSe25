@@ -2,7 +2,7 @@ package org.ea.utiltities;
 
 import org.ea.model.Edge3D;
 import org.ea.model.Polygon;
-import org.ea.model.Vertex3D;
+import org.ea.model.Vertex;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,8 +11,8 @@ import java.util.List;
 import java.util.function.IntFunction;
 
 public interface GeometryUtils {
-    static List<Vertex3D> collectVerticesFromEdges(Edge3D[] edges) {
-        List<Vertex3D> vertices = new ArrayList<>();
+    static List<Vertex> collectVerticesFromEdges(Edge3D[] edges) {
+        List<Vertex> vertices = new ArrayList<>();
         for (Edge3D edge : edges) {
             vertices.add(edge.getStart());
             vertices.add(edge.getEnd());
@@ -20,8 +20,8 @@ public interface GeometryUtils {
         return vertices;
     }
 
-    static List<Vertex3D> collectVerticesFromSurfaces(Polygon[] surfaces) {
-        List<Vertex3D> vertices = new ArrayList<>();
+    static List<Vertex> collectVerticesFromSurfaces(Polygon[] surfaces) {
+        List<Vertex> vertices = new ArrayList<>();
         for (Polygon surface : surfaces) {
            vertices.addAll(Arrays.stream(surface.getVertices()).toList());
        }

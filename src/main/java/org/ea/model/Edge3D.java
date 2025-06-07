@@ -10,27 +10,27 @@ public interface Edge3D {
      *
      * @return the start vertex
      * @precondition none
-     * @postcondition Returns a non-null {@link Vertex3D} representing the start of the edge
+     * @postcondition Returns a non-null {@link Vertex} representing the start of the edge
      */
-    Vertex3D getStart();
+    Vertex getStart();
 
     /**
      * Returns the ending vertex of the edge.
      *
      * @return the end vertex
      * @precondition none
-     * @postcondition Returns a non-null {@link Vertex3D} representing the end of the edge
+     * @postcondition Returns a non-null {@link Vertex} representing the end of the edge
      */
-    Vertex3D getEnd();
+    Vertex getEnd();
 
     /**
      * Returns the direction vector from the start vertex to the end vertex.
      *
-     * @return a {@link Vector3D} representing the direction from start to end
+     * @return a {@link Vector} representing the direction from start to end
      * @precondition {@code getStart() != null && getEnd() != null}
-     * @postcondition Returns a new {@link Vector3D} such that {@code direction = start - end}
+     * @postcondition Returns a new {@link Vector} such that {@code direction = start - end}
      */
-    Vector3D getDirection();
+    Vector getDirection();
 
     /**
      * Returns the length of the edge.

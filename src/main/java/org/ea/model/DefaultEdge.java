@@ -1,13 +1,11 @@
 package org.ea.model;
 
-import java.util.Objects;
-
 /**
  * A default implementation of the {@link Edge3D} interface representing a directed edge in 3D space.
  */
-public class DefaultEdge3D implements Edge3D {
-    private final Vertex3D startVertex;
-    private final Vertex3D endVertex;
+public class DefaultEdge implements Edge3D {
+    private final Vertex startVertex;
+    private final Vertex endVertex;
 
     /**
      * Constructs a new 3D edge from the given start and end vertices.
@@ -17,7 +15,7 @@ public class DefaultEdge3D implements Edge3D {
      * @precondition {@code startVertex != null && endVertex != null}
      * @postcondition A new {@code DefaultEdge3D} instance is created with the specified start and end vertices
      */
-    public DefaultEdge3D(Vertex3D startVertex, Vertex3D endVertex) {
+    public DefaultEdge(Vertex startVertex, Vertex endVertex) {
         this.startVertex = startVertex;
         this.endVertex = endVertex;
     }
@@ -30,7 +28,7 @@ public class DefaultEdge3D implements Edge3D {
      * @postcondition The start vertex of the edge is returned
      */
     @Override
-    public Vertex3D getStart() {
+    public Vertex getStart() {
         return this.startVertex;
     }
 
@@ -42,7 +40,7 @@ public class DefaultEdge3D implements Edge3D {
      * @postcondition The end vertex of the edge is returned
      */
     @Override
-    public Vertex3D getEnd() {
+    public Vertex getEnd() {
         return this.endVertex;
     }
 
@@ -54,7 +52,7 @@ public class DefaultEdge3D implements Edge3D {
      * @postcondition A {@code Vector3D} representing {@code start - end} is returned
      */
     @Override
-    public Vector3D getDirection() {
+    public Vector getDirection() {
         return this.getStart().subtract(this.getEnd());
     }
 

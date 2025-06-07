@@ -12,11 +12,11 @@ public class Triangle extends Polygon {
     @Override
     public double getArea() {
         // getting direction of edges
-        Vector3D dir1 = this.getEdges()[GeometricConstants.FIRST_EDGE].getDirection();
-        Vector3D dir2 = this.getEdges()[GeometricConstants.SECOND_EDGE].getDirection();
+        Vector dir1 = this.getEdges()[GeometricConstants.FIRST_EDGE].getDirection();
+        Vector dir2 = this.getEdges()[GeometricConstants.SECOND_EDGE].getDirection();
 
         // calculating crossproduct
-        Vector3D crossProduct = dir1.crossProduct(dir2);
+        Vector crossProduct = dir1.crossProduct(dir2);
 
         // length of crossproduct equals to the area of the parallelogramm
         double parallelogramArea = crossProduct.length();
@@ -31,7 +31,7 @@ public class Triangle extends Polygon {
     }
 
     @Override
-    public Vector3D getPosition() {
+    public Vector getPosition() {
         return null;
     }
 }

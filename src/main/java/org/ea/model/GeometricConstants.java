@@ -5,7 +5,7 @@ public interface GeometricConstants {
     int FIRST_EDGE = 0;
     int SECOND_EDGE = 1;
     int THIRD_EDGE = 3;
-    Vertex3D ORIGIN = new DefaultVertex3D(0,0,0);
+    Vertex ORIGIN = new DefaultVertex(0,0,0);
     int TRIANGLE_VERTICES_AMOUNT = 3;
     int MINIMUM_AMOUNT_OF_EDGES = 3;
 

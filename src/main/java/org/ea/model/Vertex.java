@@ -1,15 +1,15 @@
 package org.ea.model;
 
-public interface Vertex3D {
+public interface Vertex {
     float getX();
 
     float getY();
 
     float getZ();
 
-    public Vector3D subtract(Vertex3D other);
+    public Vector subtract(Vertex other);
 
-    default boolean equals(Vertex3D other) {
+    default boolean equals(Vertex other) {
         if (other == null) return false;
         return getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
     }
