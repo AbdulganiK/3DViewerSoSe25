@@ -1,4 +1,7 @@
-package org.ea.model;
+package org.ea.constant;
+
+import org.ea.model.DefaultVertex;
+import org.ea.model.Vertex;
 
 public interface GeometricConstants {
     float HALF_OF_PARALLELOGRAM = 2.0f;

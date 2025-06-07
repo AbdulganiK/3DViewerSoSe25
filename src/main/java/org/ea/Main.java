@@ -10,7 +10,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.ea.model.*;
 import org.ea.utiltities.STLAsciiReader;
+import org.ea.utiltities.STLByteReader;
+import org.ea.utiltities.STLReader;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -21,5 +24,6 @@ import java.util.function.BiConsumer;
 public class Main {
 
     public static void main(String[] args) {
+
     }
 }

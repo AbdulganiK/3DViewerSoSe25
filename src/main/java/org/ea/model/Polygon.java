@@ -1,5 +1,7 @@
 package org.ea.model;
 
+import org.ea.constant.GeometricConstants;
+
 /**
  * Represents a 3D polygon, which is a closed polyline with at least a minimum number of edges.
  */

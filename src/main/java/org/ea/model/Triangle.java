@@ -1,5 +1,7 @@
 package org.ea.model;
 
+import org.ea.constant.GeometricConstants;
+
 public class Triangle extends Polygon {
     public Triangle(Edge3D[] edges) {
         super(edges);

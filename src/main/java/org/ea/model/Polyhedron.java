@@ -1,5 +1,6 @@
 package org.ea.model;
 
+import org.ea.constant.GeometricConstants;
 import org.ea.utiltities.GeometryUtils;
 
 import java.util.*;

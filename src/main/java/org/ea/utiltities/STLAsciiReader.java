@@ -1,12 +1,14 @@
 package org.ea.utiltities;
 
-import java.io.BufferedReader;
-import java.io.Reader;
+import org.ea.constant.ExceptionMessages;
+
+import java.io.*;
 import java.util.List;
 
 public class STLAsciiReader extends BufferedReader implements STLReader {
-    public STLAsciiReader(Reader in) {
-        super(in);
+    public STLAsciiReader(File file) throws FileNotFoundException {
+        super(new FileReader(file));
+        if (!isSTLFile(file.getName())) throw new RuntimeException(ExceptionMessages.notASTLFile);
     }
 
     @Override
