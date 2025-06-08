@@ -1,16 +1,21 @@
 package org.ea.model;
 
 import org.ea.constant.GeometricConstants;
+import org.ea.utiltities.GeometryUtils;
 
 public class Triangle extends Polygon {
-    private Vector normal;
+    private final Vector normal;
 
-    public Triangle(Edge3D[] edges) {
+    public Triangle(Edge3D[] edges, Vector normal) {
         super(edges);
         if (edges.length != GeometricConstants.TRIANGLE_VERTICES_AMOUNT) {
             throw new RuntimeException("A triangle must have 3 Edges!");
         }
+        this.normal = normal;
+    }
 
+    public Triangle(Vertex[] vertices, Vector normal) {
+        this(GeometryUtils.createEdgesFromVertices(vertices), normal);
     }
 
     @Override
@@ -27,6 +32,10 @@ public class Triangle extends Polygon {
 
         // diving parallelogramAre by 2 to get the area of triangle
         return parallelogramArea / GeometricConstants.HALF_OF_PARALLELOGRAM;
+    }
+
+    public Vector getNormal() {
+        return this.normal;
     }
 
     @Override

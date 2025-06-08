@@ -1,5 +1,7 @@
 package org.ea.utiltities;
 
+import org.ea.constant.GeometricConstants;
+import org.ea.model.DefaultEdge;
 import org.ea.model.Edge3D;
 import org.ea.model.Polygon;
 import org.ea.model.Vertex;
@@ -43,6 +45,14 @@ public interface GeometryUtils {
 
     static  <T> T[] removeDuplicates(T[] items, IntFunction<T[]> arrayConstructor) {
         return removeDuplicates(Arrays.asList(items), arrayConstructor);
+    }
+
+    public static Edge3D[] createEdgesFromVertices(Vertex[] vertices) {
+        return new DefaultEdge[] {
+                new DefaultEdge(vertices[GeometricConstants.FIRST_EDGE], vertices[GeometricConstants.SECOND_EDGE]),
+                new DefaultEdge(vertices[GeometricConstants.SECOND_EDGE], vertices[GeometricConstants.THIRD_EDGE]),
+                new DefaultEdge(vertices[GeometricConstants.THIRD_EDGE], vertices[GeometricConstants.FIRST_EDGE])
+        };
     }
 
 
