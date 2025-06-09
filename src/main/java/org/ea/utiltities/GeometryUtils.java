@@ -47,12 +47,22 @@ public interface GeometryUtils {
         return removeDuplicates(Arrays.asList(items), arrayConstructor);
     }
 
-    public static Edge3D[] createEdgesFromVertices(Vertex[] vertices) {
-        return new DefaultEdge[] {
-                new DefaultEdge(vertices[GeometricConstants.FIRST_EDGE], vertices[GeometricConstants.SECOND_EDGE]),
-                new DefaultEdge(vertices[GeometricConstants.SECOND_EDGE], vertices[GeometricConstants.THIRD_EDGE]),
-                new DefaultEdge(vertices[GeometricConstants.THIRD_EDGE], vertices[GeometricConstants.FIRST_EDGE])
-        };
+    static Edge3D[] createEdgesFromVertices(Vertex[] vertices) {
+        if (vertices == null || vertices.length < 2) {
+            return new Edge3D[0]; // Keine Kanten möglich
+        }
+
+        Edge3D[] edges = new Edge3D[vertices.length]; // Bei geschlossenem Polygon: letzte Kante schließt den Kreis
+
+        // Kanten zwischen aufeinanderfolgenden Vertices erstellen
+        for (int i = 0; i < vertices.length - 1; i++) {
+            edges[i] = new DefaultEdge(vertices[i], vertices[i + 1]);
+        }
+
+        // Letzte Kante, die den letzten mit dem ersten Vertex verbindet
+        edges[vertices.length - 1] = new DefaultEdge(vertices[vertices.length - 1], vertices[0]);
+
+        return edges;
     }
 
 

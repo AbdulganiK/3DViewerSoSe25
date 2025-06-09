@@ -36,8 +36,14 @@ public abstract class Polygon extends Polyline implements SurfaceGeometry {
      * @postcondition Returns {@code true} if polyline is closed, {@code false} otherwise
      */
     private boolean isPolylineClosed(Polyline polyline) {
-        int lastEdgeIndex = polyline.getEdges().length - 1;
-        return polyline.getEdges()[GeometricConstants.FIRST_EDGE]
-                .equals(polyline.getEdges()[lastEdgeIndex]);
+        if (polyline == null || polyline.getEdges() == null || polyline.getEdges().length == 0) {
+            return false; // Keine Kanten → nicht geschlossen
+        }
+
+        Edge3D[] edges = polyline.getEdges();
+        Vertex firstVertex = edges[0].getStart(); // Startpunkt der ersten Kante
+        Vertex lastVertex = edges[edges.length - 1].getEnd(); // Endpunkt der letzten Kante
+
+        return firstVertex.equals(lastVertex); // Geschlossen, wenn Start und Ende gleich sind
     }
 }

@@ -1,9 +1,8 @@
 package org.ea;
+import org.ea.model.Polygon;
+import org.ea.model.Polyhedron;
 import org.ea.model.Triangle;
-import org.ea.utiltities.STLAsciiReader;
-import org.ea.utiltities.STLByteReader;
-import org.ea.utiltities.STLReader;
-import org.ea.utiltities.TriangleFactory;
+import org.ea.utiltities.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -17,6 +16,7 @@ public class Main {
         STLReader stlReader = new STLAsciiReader(new File("src/main/resources/viewerascii.stl"));
         List<Float> triangleData = stlReader.readTriangleData();
         List<Triangle> triangles = TriangleFactory.buildTriangles(triangleData);
+        Polyhedron polyhedron = PolyhedronFactory.buildPolyhedron(triangles);
     }
 
 

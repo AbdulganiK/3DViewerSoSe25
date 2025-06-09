@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 public class Polyhedron implements SolidGeometry {
 
     private final Vertex[] vertices;
-    private final Polygon[] surfaces;
+    private final Triangle[] surfaces;
     private final Edge3D[] edges;
 
-    public Polyhedron(Polygon[] surfaces) {
+    public Polyhedron(Triangle[] surfaces) {
         // collect edges and vertices
         Edge3D[] edges = GeometryUtils.collectEdgesFromSurfaces(surfaces).toArray(new Edge3D[0]);
         if (!areSurfacesConnectedToEachOtherByEdges(edges)) throw new RuntimeException("Kein geschlossenes Polygon!");
