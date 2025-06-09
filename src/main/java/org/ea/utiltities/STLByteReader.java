@@ -52,7 +52,7 @@ public class STLByteReader extends FileInputStream implements STLReader {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Float> readTriangles() throws IOException {
+    public List<Float> readTriangleData() throws IOException {
         int triangleAmount = readAmountOfTriangles();
         byte[] triangleData = readByteRange(Numbers.HEADER_LENGTH + Numbers.TRIANGLE_AMOUNT_LENGTH, triangleAmount * 4 * 12);
         ByteBuffer buffer = ByteBuffer.wrap(triangleData).order(ByteOrder.LITTLE_ENDIAN);

@@ -21,7 +21,7 @@ public class STLAsciiReader extends BufferedReader implements STLReader {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Float> readTriangles() {
+    public List<Float> readTriangleData() {
         List<Float> floats = new ArrayList<>();
         List<String> lines = this.lines().toList();
         for (String line : lines) {

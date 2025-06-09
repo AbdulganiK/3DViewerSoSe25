@@ -15,7 +15,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         STLReader stlReader = new STLAsciiReader(new File("src/main/resources/viewerascii.stl"));
-        List<Float> triangleData = stlReader.readTriangles();
+        List<Float> triangleData = stlReader.readTriangleData();
         List<Triangle> triangles = TriangleFactory.buildTriangles(triangleData);
     }
 
