@@ -1,5 +1,10 @@
 package org.ea;
+
 import org.ea.constant.FilePaths;
+import org.ea.controller.PolyhedronController;
+import org.ea.exceptions.EndOfFileReachedException;
+import org.ea.exceptions.NotAStlFileException;
+import org.ea.exceptions.OffsetOutOfRangeException;
 import org.ea.model.Polygon;
 import org.ea.model.Polyhedron;
 import org.ea.model.Triangle;
@@ -16,28 +21,24 @@ import java.util.concurrent.BlockingQueue;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        areBothReadersEqual();
+        doTask2();
     }
 
-
-    private static void doTask2() throws IOException {
-        Polyhedron polyhedron = PolyhedronFactory.buildPolyhedron(
-                TriangleFactory.buildTriangles(
-                        new STLByteReader(new File(FilePaths.SMALL_STL_BYTE_FILE))
-                                .readTriangleData()));
-
-        Triangle[] triangles = polyhedron.getSurfaces();
-        Arrays.sort(triangles);
-        for (Triangle triangle : triangles) {
-            System.out.println(triangle.getArea());
+    private static void doTask2() {
+        PolyhedronController polyhedronController = null;
+        try {
+            polyhedronController = new PolyhedronController(
+                    PolyhedronFactory.buildPolyhedron(
+                            TriangleFactory.buildTriangles(
+                                    new STLByteReader(
+                                            new File(FilePaths.LARGE_STL_BYTE_FILE)).readTriangleData())));
+        } catch (EndOfFileReachedException | NotAStlFileException | OffsetOutOfRangeException | IOException e) {
+            System.out.println(e.getMessage());
+            System.exit(-1);
         }
-    }
+        System.out.println(polyhedronController.getSortedSurfaces().length);
 
-    private static void areBothReadersEqual() throws IOException {
-        STLReader stlByteReader = new STLByteReader(new File(FilePaths.SMALL_STL_BYTE_FILE));
-        STLReader stlASCIIReader = new STLAsciiReader(new File(FilePaths.SMALL_STL_ASCII_FILE));
-        System.out.println(stlByteReader.readTriangleData());
-        System.out.println(stlASCIIReader.readTriangleData());
 
     }
+
 }

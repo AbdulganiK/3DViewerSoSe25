@@ -1,6 +1,6 @@
 package org.ea.utiltities;
 
-import org.ea.constant.ExceptionMessages;
+import org.ea.exceptions.ExceptionMessages;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.List;
 public class STLAsciiReader extends BufferedReader implements STLReader {
     public STLAsciiReader(File file) throws FileNotFoundException {
         super(new FileReader(file));
-        if (isNotSTLFile(file.getName())) throw new RuntimeException(ExceptionMessages.notASTLFile);
+        if (isNotSTLFile(file.getName())) throw new RuntimeException(ExceptionMessages.NOT_A_STL_FILE);
     }
 
     @SuppressWarnings("unchecked")

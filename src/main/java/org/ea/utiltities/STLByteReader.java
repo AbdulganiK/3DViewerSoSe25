@@ -1,7 +1,10 @@
 package org.ea.utiltities;
 
-import org.ea.constant.ExceptionMessages;
+import org.ea.exceptions.EndOfFileReachedException;
+import org.ea.exceptions.ExceptionMessages;
 import org.ea.constant.Numbers;
+import org.ea.exceptions.NotAStlFileException;
+import org.ea.exceptions.OffsetOutOfRangeException;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -15,14 +18,14 @@ import java.nio.ByteOrder;
 public class STLByteReader extends FileInputStream implements STLReader {
     private static final int TRIANGLE_DATA_SIZE = 50;
 
-    public STLByteReader(File file) throws FileNotFoundException {
+    public STLByteReader(File file) throws FileNotFoundException, NotAStlFileException {
         super(file);
-        if (isNotSTLFile(file.getName())) throw new RuntimeException(ExceptionMessages.notASTLFile);
+        if (isNotSTLFile(file.getName())) throw new NotAStlFileException();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Byte> readHeader() throws IOException {
+    public List<Byte> readHeader() throws EndOfFileReachedException, OffsetOutOfRangeException, IOException {
         byte[] header = this.readByteRange(Numbers.FILE_START, Numbers.HEADER_LENGTH);
         List<Byte> headerList = new ArrayList<>();
         for (byte b : header) {
@@ -31,14 +34,18 @@ public class STLByteReader extends FileInputStream implements STLReader {
         return headerList ;
     }
 
-    private byte[] readByteRange(long offset, int length) throws IOException {
-        this.getChannel().position(offset); // Direktes Positionieren
+    private byte[] readByteRange(long offset, int length) throws OffsetOutOfRangeException, EndOfFileReachedException, IOException {
+        try {
+            this.getChannel().position(offset);
+        } catch (IOException e) {
+            throw new OffsetOutOfRangeException();
+        }
         byte[] buffer = new byte[length];
         int bytesRead = 0;
         while (bytesRead < length) {
             int read = this.read(buffer, bytesRead, length - bytesRead);
             if (read == -1) {
-                throw new IOException("Dateiende erreicht, bevor alle Bytes gelesen wurden");
+                throw new EndOfFileReachedException();
             }
             bytesRead += read;
         }
@@ -46,7 +53,7 @@ public class STLByteReader extends FileInputStream implements STLReader {
     }
 
 
-    public int readAmountOfTriangles() throws IOException {
+    public int readAmountOfTriangles() throws EndOfFileReachedException, OffsetOutOfRangeException, IOException {
         byte[] triangleAmountData = this.readByteRange(Numbers.HEADER_LENGTH, Numbers.TRIANGLE_AMOUNT_LENGTH);
         ByteBuffer buffer = ByteBuffer.wrap(triangleAmountData).order(ByteOrder.LITTLE_ENDIAN);
         return buffer.getInt();
@@ -54,7 +61,7 @@ public class STLByteReader extends FileInputStream implements STLReader {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Float> readTriangleData() throws IOException {
+    public List<Float> readTriangleData() throws IOException, EndOfFileReachedException, OffsetOutOfRangeException {
         int triangleAmount = readAmountOfTriangles();
         byte[] triangleData = readByteRange(
                 Numbers.HEADER_LENGTH + Numbers.TRIANGLE_AMOUNT_LENGTH,
@@ -66,12 +73,8 @@ public class STLByteReader extends FileInputStream implements STLReader {
 
         List<Float> floatList = new ArrayList<>(triangleAmount * 12); // 12 Floats pro Dreieck (3 Normale + 9 Eckpunkte)
         for (int i = 0; i < triangleAmount; i++) {
-            // Lese Normale (3 Floats)
-            for (int j = 0; j < 3; j++) {
-                floatList.add(buffer.getFloat());
-            }
             // Lese 3 Eckpunkte (je 3 Floats)
-            for (int j = 0; j < 9; j++) {
+            for (int j = 0; j < 12; j++) {
                 floatList.add(buffer.getFloat());
             }
             // Überspringe 2 Attribut-Bytes

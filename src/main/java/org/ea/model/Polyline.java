@@ -1,5 +1,6 @@
 package org.ea.model;
 
+import org.ea.exceptions.ExceptionMessages;
 import org.ea.utiltities.GeometryUtils;
 
 /**

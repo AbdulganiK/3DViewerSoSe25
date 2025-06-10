@@ -1,6 +1,7 @@
 package org.ea.model;
 
 import org.ea.constant.GeometricConstants;
+import org.ea.exceptions.NotAClosedPolyhedron;
 import org.ea.utiltities.GeometryUtils;
 
 import java.util.*;
@@ -13,10 +14,10 @@ public class Polyhedron implements SolidGeometry {
     private final Triangle[] surfaces;
     private final Edge3D[] edges;
 
-    public Polyhedron(Triangle[] surfaces) {
+    public Polyhedron(Triangle[] surfaces) throws NotAClosedPolyhedron {
         // collect edges and vertices
         Edge3D[] edges = GeometryUtils.collectEdgesFromSurfaces(surfaces).toArray(new Edge3D[0]);
-        if (!areSurfacesConnectedToEachOtherByEdges(edges)) throw new RuntimeException("Kein geschlossenes Polygon!");
+        if (!areSurfacesConnectedToEachOtherByEdges(edges)) throw new NotAClosedPolyhedron();
         this.surfaces = surfaces;
         // removing duplicate edges
         this.edges = GeometryUtils.removeDuplicates(edges, Edge3D[]::new);
