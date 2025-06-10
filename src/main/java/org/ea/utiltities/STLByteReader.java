@@ -13,6 +13,8 @@ import java.util.List;
 import java.nio.ByteOrder;
 
 public class STLByteReader extends FileInputStream implements STLReader {
+    private static final int TRIANGLE_DATA_SIZE = 50;
+
     public STLByteReader(File file) throws FileNotFoundException {
         super(file);
         if (isNotSTLFile(file.getName())) throw new RuntimeException(ExceptionMessages.notASTLFile);
@@ -54,11 +56,26 @@ public class STLByteReader extends FileInputStream implements STLReader {
     @Override
     public List<Float> readTriangleData() throws IOException {
         int triangleAmount = readAmountOfTriangles();
-        byte[] triangleData = readByteRange(Numbers.HEADER_LENGTH + Numbers.TRIANGLE_AMOUNT_LENGTH, triangleAmount * 4 * 12);
-        ByteBuffer buffer = ByteBuffer.wrap(triangleData).order(ByteOrder.LITTLE_ENDIAN);
-        ArrayList<Float> floatList = new ArrayList<>();
-        while (buffer.remaining() >= Float.BYTES) {
-            floatList.add(buffer.getFloat());
+        byte[] triangleData = readByteRange(
+                Numbers.HEADER_LENGTH + Numbers.TRIANGLE_AMOUNT_LENGTH,
+                triangleAmount * TRIANGLE_DATA_SIZE
+        );
+
+        ByteBuffer buffer = ByteBuffer.wrap(triangleData)
+                .order(ByteOrder.LITTLE_ENDIAN);
+
+        List<Float> floatList = new ArrayList<>(triangleAmount * 12); // 12 Floats pro Dreieck (3 Normale + 9 Eckpunkte)
+        for (int i = 0; i < triangleAmount; i++) {
+            // Lese Normale (3 Floats)
+            for (int j = 0; j < 3; j++) {
+                floatList.add(buffer.getFloat());
+            }
+            // Lese 3 Eckpunkte (je 3 Floats)
+            for (int j = 0; j < 9; j++) {
+                floatList.add(buffer.getFloat());
+            }
+            // Überspringe 2 Attribut-Bytes
+            buffer.position(buffer.position() + 2);
         }
         return floatList;
     }

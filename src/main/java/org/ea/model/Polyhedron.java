@@ -74,7 +74,7 @@ public class Polyhedron implements SolidGeometry {
         return edges;
     }
 
-    public Polygon[] getSurfaces() {
+    public Triangle[] getSurfaces() {
         return surfaces;
     }
 

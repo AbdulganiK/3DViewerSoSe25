@@ -3,7 +3,7 @@ package org.ea.model;
 import org.ea.constant.GeometricConstants;
 import org.ea.utiltities.GeometryUtils;
 
-public class Triangle extends Polygon {
+public class Triangle extends Polygon implements Comparable<Triangle> {
     private final Vector normal;
 
     public Triangle(Edge3D[] edges, Vector normal) {
@@ -46,5 +46,14 @@ public class Triangle extends Polygon {
     @Override
     public Vector getPosition() {
         return null;
+    }
+
+    @Override
+    public int compareTo(Triangle o) {
+        if(this.getArea() < o.getArea())
+            return -1;
+        else if(o.getArea() < this.getArea())
+            return 1;
+        return 0;
     }
 }
