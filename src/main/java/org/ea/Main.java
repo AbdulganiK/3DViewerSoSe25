@@ -5,6 +5,7 @@ import org.ea.controller.PolyhedronController;
 import org.ea.exceptions.EndOfFileReachedException;
 import org.ea.exceptions.NotAStlFileException;
 import org.ea.exceptions.OffsetOutOfRangeException;
+import org.ea.exceptions.STLReaderException;
 import org.ea.model.Polygon;
 import org.ea.model.Polyhedron;
 import org.ea.model.Triangle;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Main {
 
@@ -31,8 +33,8 @@ public class Main {
                     PolyhedronFactory.buildPolyhedron(
                             TriangleFactory.buildTriangles(
                                     new STLByteReader(
-                                            new File(FilePaths.LARGE_STL_BYTE_FILE)).readTriangleData())));
-        } catch (EndOfFileReachedException | NotAStlFileException | OffsetOutOfRangeException | IOException e) {
+                                            new File(FilePaths.LARGE_STL_BYTE_FILE), new LinkedBlockingQueue<List<Float>>()).readTriangleData())));
+        } catch (STLReaderException | IOException e) {
             System.out.println(e.getMessage());
             System.exit(-1);
         }
