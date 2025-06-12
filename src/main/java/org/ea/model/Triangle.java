@@ -1,20 +1,23 @@
 package org.ea.model;
 
 import org.ea.constant.GeometricConstants;
+import org.ea.exceptions.NotAClosedPolygonException;
+import org.ea.exceptions.NotATriangleException;
+import org.ea.exceptions.NotEnoughEdgesForAPolygonException;
 import org.ea.utiltities.GeometryUtils;
 
 public class Triangle extends Polygon implements Comparable<Triangle> {
     private final Vector normal;
 
-    public Triangle(Edge3D[] edges, Vector normal) {
+    public Triangle(Edge3D[] edges, Vector normal) throws NotAClosedPolygonException, NotATriangleException, NotEnoughEdgesForAPolygonException {
         super(edges);
         if (edges.length != GeometricConstants.TRIANGLE_VERTICES_AMOUNT) {
-            throw new RuntimeException("A triangle must have 3 Edges!");
+            throw new NotATriangleException();
         }
         this.normal = normal;
     }
 
-    public Triangle(Vertex[] vertices, Vector normal) {
+    public Triangle(Vertex[] vertices, Vector normal) throws NotATriangleException, NotAClosedPolygonException, NotEnoughEdgesForAPolygonException {
         this(GeometryUtils.createEdgesFromVertices(vertices), normal);
     }
 

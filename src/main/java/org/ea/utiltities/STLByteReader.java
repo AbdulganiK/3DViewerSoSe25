@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.nio.ByteOrder;
 
-public class STLByteReader extends FileInputStream implements STLReader {
+public class STLByteReader extends FileInputStream implements STLReader, Runnable {
     private static final int TRIANGLE_DATA_SIZE = 50;
 
     public STLByteReader(File file) throws FileNotFoundException, NotAStlFileException {
@@ -81,5 +81,10 @@ public class STLByteReader extends FileInputStream implements STLReader {
             buffer.position(buffer.position() + 2);
         }
         return floatList;
+    }
+
+    @Override
+    public void run() {
+
     }
 }

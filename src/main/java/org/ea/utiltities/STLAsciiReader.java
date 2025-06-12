@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class STLAsciiReader extends BufferedReader implements STLReader {
+public class STLAsciiReader extends BufferedReader implements STLReader, Runnable {
     public STLAsciiReader(File file) throws FileNotFoundException {
         super(new FileReader(file));
         if (isNotSTLFile(file.getName())) throw new RuntimeException(ExceptionMessages.NOT_A_STL_FILE);
@@ -39,5 +39,10 @@ public class STLAsciiReader extends BufferedReader implements STLReader {
         }
 
         return floats;
+    }
+
+    @Override
+    public void run() {
+
     }
 }

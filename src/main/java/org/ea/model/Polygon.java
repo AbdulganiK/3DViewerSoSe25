@@ -1,6 +1,8 @@
 package org.ea.model;
 
 import org.ea.constant.GeometricConstants;
+import org.ea.exceptions.NotAClosedPolygonException;
+import org.ea.exceptions.NotEnoughEdgesForAPolygonException;
 
 /**
  * Represents a 3D polygon, which is a closed polyline with at least a minimum number of edges.
@@ -17,13 +19,13 @@ public abstract class Polygon extends Polyline implements SurfaceGeometry {
      * @precondition {@code edges != null && edges.length >= 1 && all edges != null}
      * @postcondition A new {@code Polygon} is constructed if the conditions are valid, otherwise an exception is thrown
      */
-    public Polygon(Edge3D[] edges) {
+    public Polygon(Edge3D[] edges) throws NotAClosedPolygonException, NotEnoughEdgesForAPolygonException {
         super(edges);
         if (edges.length < GeometricConstants.MINIMUM_AMOUNT_OF_EDGES) {
-            throw new RuntimeException("Polygon must have at least " + GeometricConstants.MINIMUM_AMOUNT_OF_EDGES + " edges.");
+            throw new NotEnoughEdgesForAPolygonException();
         }
         if (!isPolylineClosed(this)) {
-            throw new RuntimeException("Polygon must be closed (first and last points must connect).");
+            throw new NotAClosedPolygonException();
         }
     }
 

@@ -1,5 +1,8 @@
 package org.ea.utiltities;
 
+import org.ea.exceptions.NotAClosedPolygonException;
+import org.ea.exceptions.NotATriangleException;
+import org.ea.exceptions.NotEnoughEdgesForAPolygonException;
 import org.ea.model.*;
 
 import java.util.ArrayList;
@@ -29,7 +32,13 @@ public class TriangleFactory {
             }
         }
         Vertex[] vertexArray = vertices.toArray(new Vertex[0]);
-        return new Triangle(vertexArray, normal);
+        try {
+            return new Triangle(vertexArray, normal);
+        } catch (NotATriangleException | NotAClosedPolygonException | NotEnoughEdgesForAPolygonException e) {
+            System.out.println(e.getMessage());
+            System.exit(-1);
+        }
+        return null;
     }
 
 
