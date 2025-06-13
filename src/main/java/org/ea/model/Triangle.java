@@ -8,6 +8,7 @@ import org.ea.utiltities.GeometryUtils;
 
 public class Triangle extends Polygon implements Comparable<Triangle> {
     private final Vector normal;
+    private Double area;
 
     public Triangle(Edge3D[] edges, Vector normal) throws NotAClosedPolygonException, NotATriangleException, NotEnoughEdgesForAPolygonException {
         super(edges);
@@ -22,19 +23,23 @@ public class Triangle extends Polygon implements Comparable<Triangle> {
     }
 
     @Override
-    public double getArea() {
-        // getting direction of edges
-        Vector dir1 = this.getEdges()[GeometricConstants.FIRST_EDGE].getDirection();
-        Vector dir2 = this.getEdges()[GeometricConstants.SECOND_EDGE].getDirection();
+    public synchronized double getArea() {
+        if (area == null) {
+            // getting direction of edges
+            Vector dir1 = this.getEdges()[GeometricConstants.FIRST_EDGE].getDirection();
+            Vector dir2 = this.getEdges()[GeometricConstants.SECOND_EDGE].getDirection();
 
-        // calculating crossproduct
-        Vector crossProduct = dir1.crossProduct(dir2);
+            // calculating crossproduct
+            Vector crossProduct = dir1.crossProduct(dir2);
 
-        // length of crossproduct equals to the area of the parallelogramm
-        double parallelogramArea = crossProduct.length();
+            // length of crossproduct equals to the area of the parallelogramm
+            double parallelogramArea = crossProduct.length();
 
-        // diving parallelogramAre by 2 to get the area of triangle
-        return parallelogramArea / GeometricConstants.HALF_OF_PARALLELOGRAM;
+            // diving parallelogramAre by 2 to get the area of triangle
+            this.area = parallelogramArea / GeometricConstants.HALF_OF_PARALLELOGRAM;
+
+        }
+        return area;
     }
 
     public Vector getNormal() {

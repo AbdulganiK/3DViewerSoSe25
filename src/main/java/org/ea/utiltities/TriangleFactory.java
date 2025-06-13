@@ -56,19 +56,28 @@ public class TriangleFactory implements Runnable {
 
     @Override
     public void run() {
-        if (dataQueue != null) {
-            while (true) {
-                try {
-                    if (dataQueue.take().getFirst() == null){
-                        break;
-                    } else {
-                        this.triangles.add(this.buildTriangle(dataQueue.take()));
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt(); // Interrupt-Flag wieder setzen
-                    break;
+        if (dataQueue == null) {
+            return; // Queue ist null → Abbruch
+        }
+
+        while (!Thread.currentThread().isInterrupted()) {
+            try {
+                List<Float> triangleData = dataQueue.take(); // Ein Element holen
+
+                // Prüfe auf End-Signal (null oder leere Liste)
+                if (triangleData.getFirst() == null || triangleData.isEmpty()) {
+                    break; // Beende die Schleife
                 }
 
+                // Erstelle das Dreieck und füge es hinzu
+                Triangle triangle = this.buildTriangle(triangleData);
+                if (triangle != null) {
+                    this.triangles.add(triangle);
+                }
+
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt(); // Interrupt-Flag setzen
+                break; // Schleife beenden
             }
         }
     }

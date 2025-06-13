@@ -60,11 +60,10 @@ public class Polyhedron implements SolidGeometry {
 
     @Override
     public double getArea() {
-        double area = 0;
-        for (Polygon surface : this.surfaces) {
-            area += surface.getArea();
-        }
-        return area;
+            return Arrays.stream(surfaces)
+                    .parallel() // Parallelisierung hier
+                    .mapToDouble(Triangle::getArea)
+                    .sum();
     }
 
     @Override

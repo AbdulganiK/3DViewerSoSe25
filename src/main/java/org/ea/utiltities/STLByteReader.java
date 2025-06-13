@@ -110,5 +110,8 @@ public class STLByteReader extends FileInputStream implements STLReader, Runnabl
             System.out.println(e.getMessage());
             System.exit(-1);
         }
+        List<Float> end = new ArrayList<>();
+        end.add(null);
+        this.dataQueue.add(end);
     }
 }
