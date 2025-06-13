@@ -22,7 +22,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args){
         doTask2();
     }
 
@@ -30,8 +30,8 @@ public class Main {
         PolyhedronController polyhedronController = null;
         try {
             polyhedronController = new PolyhedronController(
-                    PolyhedronFactory.buildPolyhedron(
-                            TriangleFactory.buildTriangles(
+                    new PolyhedronFactory().buildPolyhedron(
+                            new TriangleFactory().buildTriangles(
                                     new STLByteReader(
                                             new File(FilePaths.LARGE_STL_BYTE_FILE), new LinkedBlockingQueue<List<Float>>()).readTriangleData())));
         } catch (STLReaderException | IOException e) {

@@ -8,20 +8,29 @@ import org.ea.model.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
-public class TriangleFactory {
+public class TriangleFactory implements Runnable {
+    private BlockingQueue<List<Float>> dataQueue;
+    private List<Triangle> triangles = new ArrayList<>();
 
-    public static ArrayList<Triangle> buildTriangles(List<Float> triangleData) {
+    public TriangleFactory(BlockingQueue<List<Float>> dataQueue) {
+        this.dataQueue = dataQueue;
+    }
+
+    public TriangleFactory(){}
+
+    public ArrayList<Triangle> buildTriangles(List<Float> triangleData) {
         ArrayList<Triangle> triangles = new ArrayList<>();
         for (int i = 0; i < triangleData.size(); i+=12) {
             List<Float> triangleValues = triangleData.subList(i, i+12);
-            Triangle triangle = buildTriangle(triangleValues);
+            Triangle triangle = this.buildTriangle(triangleValues);
             triangles.add(triangle);
         }
         return triangles;
     }
 
-    private static Triangle buildTriangle(List<Float> triangleValues) {
+    public Triangle buildTriangle(List<Float> triangleValues) {
         Vector normal = null;
         List<Vertex> vertices = new ArrayList<>();
         for (int i = 0; i < triangleValues.size(); i+=3) {
@@ -41,5 +50,26 @@ public class TriangleFactory {
         return null;
     }
 
+    public List<Triangle> getTriangles() {
+        return triangles;
+    }
 
+    @Override
+    public void run() {
+        if (dataQueue != null) {
+            while (true) {
+                try {
+                    if (dataQueue.take().getFirst() == null){
+                        break;
+                    } else {
+                        this.triangles.add(this.buildTriangle(dataQueue.take()));
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt(); // Interrupt-Flag wieder setzen
+                    break;
+                }
+
+            }
+        }
+    }
 }

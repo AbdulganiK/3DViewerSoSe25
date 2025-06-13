@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PolyhedronFactory {
 
-    public static Polyhedron buildPolyhedron(Triangle[] triangles) {
+    public Polyhedron buildPolyhedron(Triangle[] triangles) {
         try {
             return new Polyhedron(triangles);
         } catch (NotAClosedPolyhedronException | EulerCharacteristicException e) {
@@ -19,7 +19,7 @@ public class PolyhedronFactory {
         return null;
     }
 
-    public static Polyhedron buildPolyhedron(List<Triangle> triangles) {
+    public Polyhedron buildPolyhedron(List<Triangle> triangles) {
         return buildPolyhedron(triangles.toArray(new Triangle[0]));
     }
 
