@@ -11,7 +11,7 @@ public class Triangle extends Polygon implements Comparable<Triangle> {
     private Double area;
     private Double perimeter;
 
-    public Triangle(Edge3D[] edges, Vector normal, double area, double perimeter) throws NotAClosedPolygonException, NotATriangleException, NotEnoughEdgesForAPolygonException {
+    public Triangle(Edge3D[] edges, Vector normal, Double area, Double perimeter) throws NotAClosedPolygonException, NotATriangleException, NotEnoughEdgesForAPolygonException {
         super(edges);
         if (edges.length != GeometricConstants.TRIANGLE_VERTICES_AMOUNT) {
             throw new NotATriangleException();
@@ -26,7 +26,7 @@ public class Triangle extends Polygon implements Comparable<Triangle> {
     }
 
     @Override
-    public double getArea() {
+    public Double getArea() {
         return this.area;
     }
 
@@ -35,7 +35,7 @@ public class Triangle extends Polygon implements Comparable<Triangle> {
     }
 
     @Override
-    public double getPerimeter() {
+    public Double getPerimeter() {
         return this.perimeter;
     }
 

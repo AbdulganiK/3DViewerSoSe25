@@ -18,7 +18,8 @@ public class PolyhedronFactory implements Runnable {
     BlockingQueue<Triangle> triangleQueue;
     double area;
 
-    public PolyhedronFactory() {}
+    public PolyhedronFactory() {
+    }
 
     public PolyhedronFactory(BlockingQueue<Triangle> triangleQueue) {
         this.triangleQueue = triangleQueue;
@@ -45,7 +46,7 @@ public class PolyhedronFactory implements Runnable {
             Vector originA = surface.getVertices()[GeometricConstants.FIRST_EDGE].subtract(GeometricConstants.ORIGIN);
             Vector originB = surface.getVertices()[GeometricConstants.SECOND_EDGE].subtract(GeometricConstants.ORIGIN);
             Vector originC = surface.getVertices()[GeometricConstants.THIRD_EDGE].subtract(GeometricConstants.ORIGIN);
-            volume += (float) 1/6 * originA.dotProduct(originB.crossProduct(originC));
+            volume += (float) 1 / 6 * originA.dotProduct(originB.crossProduct(originC));
         }
         return Math.abs(volume);
     }
@@ -68,15 +69,15 @@ public class PolyhedronFactory implements Runnable {
             return; // Queue ist null → Abbruch
         }
         double area = 0;
-        while (!this.triangleQueue.isEmpty()) {
-            try {
-                Triangle triangle = this.triangleQueue.take(); // Ein Element holen
+        try {
+            Triangle triangle = this.triangleQueue.take(); // Ein Element holen
+            while (triangle.getArea() != null) {
                 area += triangle.getArea();
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Interrupt-Flag setzen
-                break; // Schleife beenden
+                triangle = this.triangleQueue.take();
             }
+            this.area = area;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // Interrupt-Flag setzen
         }
-        this.area = area;
     }
 }

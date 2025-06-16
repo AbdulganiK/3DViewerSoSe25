@@ -113,6 +113,14 @@ public class TriangleFactory implements Runnable {
         }
 
         // ACHTUNG GIFTIGE PILLE
+        Vertex[] vertices = {new DefaultVertex(1,1,1), new DefaultVertex(2,2,2), new DefaultVertex(3,3,3)};
+        Vector normal = new DefaultVector(2,2,2);
+        try {
+            this.triangleQueue.add(new Triangle(GeometryUtils.createEdgesFromVertices(vertices), normal, null, null));
+        } catch (NotAClosedPolygonException | NotATriangleException | NotEnoughEdgesForAPolygonException e) {
+            System.out.println(e.getMessage());
+            System.exit(-1);
+        }
 
     }
 }
