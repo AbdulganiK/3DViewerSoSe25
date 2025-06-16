@@ -27,7 +27,7 @@ public class Main {
                             new TriangleFactory().buildTriangles(
                                     new STLByteReader(
                                             new File(fileName), new LinkedBlockingQueue<List<Float>>())
-                                            .readTriangleData())))
+                                                .readTriangleData())))
                                                     .getSortedSurfaces();
         } catch (STLReaderException | IOException e) {
             System.out.println(e.getMessage());
@@ -38,15 +38,20 @@ public class Main {
 
     private static void doTask3(String fileName){
         LinkedBlockingQueue<List<Float>> triangleDataQueue = new LinkedBlockingQueue<>();
+        LinkedBlockingQueue<Triangle> triangleQueue = new LinkedBlockingQueue<>();
         try {
-            TriangleFactory triangleFactory = new TriangleFactory(triangleDataQueue);
+            TriangleFactory triangleFactory = new TriangleFactory(triangleDataQueue, triangleQueue);
+            PolyhedronFactory polyhedronFactory = new PolyhedronFactory(triangleQueue);
             Thread readerThread = new Thread(new STLByteReader(new File(fileName), triangleDataQueue));
-            Thread factoryThread = new Thread(triangleFactory);
+            Thread triangleFactoryThread = new Thread(triangleFactory);
+            Thread polyhedronFactoryThread = new Thread(polyhedronFactory);
             readerThread.start();
-            factoryThread.start();
+            triangleFactoryThread.start();
+            polyhedronFactoryThread.start();
             readerThread.join();
-            factoryThread.join();
-            System.out.println(new PolyhedronFactory().buildPolyhedron(triangleFactory.getTriangles()).getArea());
+            triangleFactoryThread.join();
+            polyhedronFactoryThread.join();
+            System.out.println(polyhedronFactory.getArea());
         } catch (STLReaderException | FileNotFoundException e) {
             System.out.println(e.getMessage());
             System.exit(-1);

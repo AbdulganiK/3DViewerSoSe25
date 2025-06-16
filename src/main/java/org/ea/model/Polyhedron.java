@@ -14,18 +14,23 @@ public class Polyhedron implements SolidGeometry {
     private final Vertex[] vertices;
     private final Triangle[] surfaces;
     private final Edge3D[] edges;
+    private final double area;
+    private final double volume;
 
-    public Polyhedron(Triangle[] surfaces) throws NotAClosedPolyhedronException, EulerCharacteristicException {
+    public Polyhedron(Triangle[] surfaces, double area, double volume) throws NotAClosedPolyhedronException, EulerCharacteristicException {
         // collect edges and vertices
         Edge3D[] edges = GeometryUtils.collectEdgesFromSurfaces(surfaces).toArray(new Edge3D[0]);
         if (!areSurfacesConnectedToEachOtherByEdges(edges)) throw new NotAClosedPolyhedronException();
         this.surfaces = surfaces;
+        this.area = area;
+        this.volume = volume;
         // removing duplicate edges
         this.edges = GeometryUtils.removeDuplicates(edges, Edge3D[]::new);
         // remove duplicate vertices
         this.vertices = GeometryUtils.removeDuplicates(GeometryUtils.collectVerticesFromSurfaces(surfaces).toArray(new Vertex[0]), Vertex[]::new);
         // check for euler)
         if (this.vertices.length - this.edges.length + this.surfaces.length!= 2) throw new EulerCharacteristicException();
+
 
 
     }
@@ -48,22 +53,12 @@ public class Polyhedron implements SolidGeometry {
 
     @Override
     public double getVolume() {
-        float volume = 0f;
-        for (Polygon surface : surfaces) {
-            Vector originA = surface.getVertices()[GeometricConstants.FIRST_EDGE].subtract(GeometricConstants.ORIGIN);
-            Vector originB = surface.getVertices()[GeometricConstants.SECOND_EDGE].subtract(GeometricConstants.ORIGIN);
-            Vector originC = surface.getVertices()[GeometricConstants.THIRD_EDGE].subtract(GeometricConstants.ORIGIN);
-            volume += (float) 1/6 * originA.dotProduct(originB.crossProduct(originC));
-        }
-        return Math.abs(volume);
+        return this.volume;
     }
 
     @Override
     public double getArea() {
-            return Arrays.stream(surfaces)
-                    .parallel() // Parallelisierung hier
-                    .mapToDouble(Triangle::getArea)
-                    .sum();
+            return this.area;
     }
 
     @Override
