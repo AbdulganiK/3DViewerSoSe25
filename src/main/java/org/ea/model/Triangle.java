@@ -52,4 +52,9 @@ public class Triangle extends Polygon implements Comparable<Triangle> {
             return 1;
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return this.getArea().toString();
+    }
 }

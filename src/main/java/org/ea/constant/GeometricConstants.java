@@ -9,7 +9,9 @@ public interface GeometricConstants {
     int SECOND_EDGE = 1;
     int THIRD_EDGE = 2;
     Vertex ORIGIN = new DefaultVertex(0,0,0);
+
     int TRIANGLE_VERTICES_AMOUNT = 3;
     int MINIMUM_AMOUNT_OF_EDGES = 3;
+    String SOLID = "solid";
 
 }

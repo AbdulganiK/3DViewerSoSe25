@@ -3,7 +3,10 @@ package org.ea;
 import com.sun.jdi.ThreadGroupReference;
 import org.ea.constant.Arguments;
 
+import org.ea.constant.Messages;
 import org.ea.controller.PolyhedronController;
+import org.ea.exceptions.EndOfFileReachedException;
+import org.ea.exceptions.OffsetOutOfRangeException;
 import org.ea.exceptions.STLReaderException;
 import org.ea.model.Triangle;
 import org.ea.utiltities.*;
@@ -17,23 +20,22 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class Main {
 
     public static void main(String[] args){
-        doTask3(args[Arguments.FILE_NAME_ARGUMENT]);
+        doTask2(args[Arguments.FILE_NAME_ARGUMENT]);
     }
 
     private static Triangle[] doTask2(String fileName) {
+        STLReader stlReader = STLFileReaderSelector.selectReader(new File(fileName));
         try {
             return new PolyhedronController(
                     new PolyhedronFactory().buildPolyhedron(
-                            new TriangleFactory().buildTriangles(
-                                    new STLByteReader(
-                                            new File(fileName), new LinkedBlockingQueue<List<Float>>())
-                                                .readTriangleData())))
-                                                    .getSortedSurfaces();
+                            new TriangleFactory().buildTriangles(stlReader.readTriangleData()))).getSortedSurfaces();
         } catch (STLReaderException | IOException e) {
-            System.out.println(e.getMessage());
-            System.exit(-1);
+            Logger.error(e.getMessage());
+            System.exit(Arguments.EXIT_ERROR);
         }
         return null;
+
+
     }
 
     private static void doTask3(String fileName){
@@ -54,7 +56,7 @@ public class Main {
             System.out.println(polyhedronFactory.getArea());
         } catch (STLReaderException | FileNotFoundException e) {
             System.out.println(e.getMessage());
-            System.exit(-1);
+            System.exit(Arguments.EXIT_ERROR);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
