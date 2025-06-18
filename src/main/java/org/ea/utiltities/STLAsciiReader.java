@@ -58,7 +58,7 @@ public class STLAsciiReader extends BufferedReader implements STLReader {
     @SuppressWarnings("unchecked")
     @Override
     public List<String> readHeader() throws IOException {
-        return Arrays.stream(this.readLine().split(" ")).toList();
+        return Arrays.stream(this.readLine().toLowerCase().split(" ")).toList();
     }
 
     /**
@@ -82,7 +82,7 @@ public class STLAsciiReader extends BufferedReader implements STLReader {
         final int FLOATS_PER_TRIANGLE = 12;
 
         for (String line : lines) {
-            line = line.trim();
+            line = line.trim().toLowerCase();
             if (line.startsWith("vertex") || line.startsWith("facet normal")) {
                 String[] parts = line.split("\\s+");
                 for (int i = 1; i < parts.length; i++) {
