@@ -1,9 +1,6 @@
 package org.ea.utiltities;
 
-import org.ea.constant.Arguments;
-import org.ea.constant.GeometricConstants;
-import org.ea.constant.Messages;
-import org.ea.constant.PoisonPills;
+import org.ea.constant.*;
 import org.ea.exceptions.GeometryException;
 import org.ea.exceptions.NotAClosedPolygonException;
 import org.ea.exceptions.NotATriangleException;
@@ -21,6 +18,9 @@ public class TriangleFactory implements Runnable {
     private BlockingQueue<List<Float>> dataQueue;
     private BlockingQueue<Triangle> triangleQueue;
     private List<Triangle> triangles = new ArrayList<>();
+    private final int FLOAT_AMOUNT_VERTEX = 3;
+    private final int FLOAT_AMOUNT_TRIANGLE = 12;
+
 
     /**
      * Constructs a TriangleFactory with the given queues.
@@ -53,8 +53,8 @@ public class TriangleFactory implements Runnable {
         Timer timer = new Timer();
         timer.start();
         ArrayList<Triangle> triangles = new ArrayList<>();
-        for (int i = 0; i < triangleData.size(); i += 12) {
-            List<Float> triangleValues = triangleData.subList(i, i + 12);
+        for (int i = 0; i < triangleData.size(); i += FLOAT_AMOUNT_TRIANGLE) {
+            List<Float> triangleValues = triangleData.subList(i, i + FLOAT_AMOUNT_TRIANGLE);
             Triangle triangle = this.buildTriangle(triangleValues);
             triangles.add(triangle);
         }
@@ -76,9 +76,9 @@ public class TriangleFactory implements Runnable {
     public Triangle buildTriangle(List<Float> triangleValues) {
         Vector normal = null;
         List<Vertex> vertices = new ArrayList<>();
-        for (int i = 0; i < triangleValues.size(); i += 3) {
+        for (int i = 0; i < triangleValues.size(); i += FLOAT_AMOUNT_VERTEX) {
             if (i == 0) {
-                normal = new DefaultVector(triangleValues.get(i), triangleValues.get(i + 1), triangleValues.get(i + 2));
+                normal = new DefaultVector(triangleValues.get(i), triangleValues.get(i + Numbers.NEXT), triangleValues.get(i + Numbers.NEXT_TWO));
             } else {
                 vertices.add(new DefaultVertex(triangleValues.get(i), triangleValues.get(i + 1), triangleValues.get(i + 2)));
             }

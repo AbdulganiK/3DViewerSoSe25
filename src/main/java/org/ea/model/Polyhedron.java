@@ -1,6 +1,7 @@
 package org.ea.model;
 
 import org.ea.constant.GeometricConstants;
+import org.ea.constant.Numbers;
 import org.ea.exceptions.EulerCharacteristicException;
 import org.ea.exceptions.NotAClosedPolyhedronException;
 import org.ea.utiltities.GeometryUtils;
@@ -29,9 +30,7 @@ public class Polyhedron implements SolidGeometry {
         // remove duplicate vertices
         this.vertices = GeometryUtils.removeDuplicates(GeometryUtils.collectVerticesFromSurfaces(surfaces).toArray(new Vertex[0]), Vertex[]::new);
         // check for euler)
-        if (this.vertices.length - this.edges.length + this.surfaces.length!= 2) throw new EulerCharacteristicException();
-
-
+        if (this.vertices.length - this.edges.length + this.surfaces.length!= Numbers.EULER_RESULT) throw new EulerCharacteristicException();
 
     }
 
