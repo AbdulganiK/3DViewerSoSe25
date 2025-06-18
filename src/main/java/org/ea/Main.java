@@ -8,6 +8,7 @@ import org.ea.utiltities.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -28,7 +29,7 @@ public class Main {
      * @param args The command-line arguments passed to the program.
      */
     public static void main(String[] args){
-        doTask2(args[Arguments.FILE_NAME_ARGUMENT]);
+        doTask3(args[Arguments.FILE_NAME_ARGUMENT]);
     }
 
     /**
@@ -38,14 +39,16 @@ public class Main {
      * @postcondition Triangles sorted by area in increasing order
      */
     private static Triangle[] doTask2(String fileName) {
+
         try {
             return new PolyhedronController(
                     new PolyhedronFactory()
                             .buildPolyhedron(
                                     new TriangleFactory()
-                                            .buildTriangles(STLFileReaderSelector
-                                            .selectReader(new File(fileName))
-                                            .readTriangleData())))
+                                            .buildTriangles(
+                                                    new STLFileReaderSelector()
+                                                            .selectReader(new File(fileName))
+                                                            .readTriangleData())))
                     .getSortedSurfaces();
         } catch (STLReaderException | IOException e) {
             Logger.error(e.getMessage());
@@ -56,27 +59,21 @@ public class Main {
     }
 
     private static void doTask3(String fileName){
-        LinkedBlockingQueue<List<Float>> triangleDataQueue = new LinkedBlockingQueue<>();
-        LinkedBlockingQueue<Triangle> triangleQueue = new LinkedBlockingQueue<>();
-        try {
-            TriangleFactory triangleFactory = new TriangleFactory(triangleDataQueue, triangleQueue);
-            PolyhedronFactory polyhedronFactory = new PolyhedronFactory(triangleQueue);
-            Thread readerThread = new Thread(new STLByteReader(new File(fileName), triangleDataQueue));
-            Thread triangleFactoryThread = new Thread(triangleFactory);
-            Thread polyhedronFactoryThread = new Thread(polyhedronFactory);
-            readerThread.start();
-            triangleFactoryThread.start();
-            polyhedronFactoryThread.start();
-            readerThread.join();
-            triangleFactoryThread.join();
-            polyhedronFactoryThread.join();
-            System.out.println(polyhedronFactory.getArea());
-        } catch (STLReaderException | FileNotFoundException e) {
-            System.out.println(e.getMessage());
-            System.exit(Arguments.EXIT_ERROR);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+
+        List<ManagedThread<?>> threads = new ArrayList<>(List.of(
+                new ManagedThread<>(new TriangleFactory(TriangleDataQueue.getInstance(), TriangleQueue.getInstance())),
+                new ManagedThread<>(new PolyhedronFactory(TriangleQueue.getInstance())),
+                new ManagedThread<>(new STLFileReaderSelector().selectReader(new File(fileName), TriangleDataQueue.getInstance()))
+        ));
+        threads.forEach(ManagedThread::start);
+        // Auf alle Threads warten
+        threads.forEach(ManagedThread::join);
+        threads.stream()
+                .map(ManagedThread::getTarget)
+                .filter(t -> t instanceof PolyhedronFactory)
+                .map(t -> (PolyhedronFactory) t)
+                .findFirst()
+                .ifPresent(factory -> Logger.info(String.valueOf(factory.getThreadedArea())));
     }
 
 

@@ -4,6 +4,7 @@ public interface Messages {
     String SUCCESSFUL_READ = "File was read successfully";
     String BUILDING_TRIANGLES_STARTED = "Building triangles started...";
     String BUILT_TRIANGLES = "%d were created";
+    String AREA_POLYHEDRON = "Calculated Area of polyhedron: %.2";
     String FLOAT_COUNT_MESSAGE = "Read %d float(s)";
     String READ_TIME_MESSAGE = "Reading took %.2f ms";
     String SORTING_TIME_MESSAGE = "Sorting took %.2f ms";

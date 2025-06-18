@@ -16,8 +16,8 @@ import java.util.concurrent.BlockingQueue;
  */
 public class PolyhedronFactory implements Runnable {
 
-    BlockingQueue<Triangle> triangleQueue;
-    double area;
+    private BlockingQueue<Triangle> triangleQueue;
+    double threadedArea;
 
     /**
      * Default constructor.
@@ -110,8 +110,8 @@ public class PolyhedronFactory implements Runnable {
         return area;
     }
 
-    public double getArea() {
-        return area;
+    public double getThreadedArea() {
+        return threadedArea;
     }
 
     /**
@@ -132,7 +132,7 @@ public class PolyhedronFactory implements Runnable {
                 area += triangle.getArea();
                 triangle = this.triangleQueue.take();
             }
-            this.area = area;
+            this.threadedArea = area;
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); // Interrupt-Flag setzen
         }

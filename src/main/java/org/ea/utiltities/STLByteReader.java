@@ -14,14 +14,15 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 import java.nio.ByteOrder;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Reads STL files in binary format and provides the triangle data.
  * Implements Runnable for asynchronous reading.
  */
-public class STLByteReader extends FileInputStream implements STLReader, Runnable {
-    private LinkedBlockingQueue<List<Float>> dataQueue;
+public class STLByteReader extends FileInputStream implements STLReader {
+    private BlockingQueue<List<Float>> dataQueue;
     private static final int TRIANGLE_DATA_SIZE = 50;
 
     /**
@@ -50,7 +51,7 @@ public class STLByteReader extends FileInputStream implements STLReader, Runnabl
      * @precondition file != null && file.exists() && dataQueue != null
      * @postcondition object is constructed and ready to read into queue
      */
-    public STLByteReader(File file, LinkedBlockingQueue<List<Float>> dataQueue) throws FileNotFoundException, NotAStlFileException {
+    public STLByteReader(File file, BlockingQueue<List<Float>> dataQueue) throws FileNotFoundException, NotAStlFileException {
         this(file);
         this.dataQueue = dataQueue;
     }

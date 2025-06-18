@@ -6,14 +6,15 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Reader for ASCII STL files.
  * Implements Runnable to read triangle data asynchronously.
  */
-public class STLAsciiReader extends BufferedReader implements STLReader, Runnable {
-    private LinkedBlockingQueue<List<Float>> dataQueue;
+public class STLAsciiReader extends BufferedReader implements STLReader {
+    private BlockingQueue<List<Float>> dataQueue;
 
     /**
      * Constructor that validates the file extension.
@@ -40,7 +41,7 @@ public class STLAsciiReader extends BufferedReader implements STLReader, Runnabl
      * @precondition file != null && file.exists() && dataQueue != null
      * @postcondition object constructed and ready to read
      */
-    public STLAsciiReader(File file, LinkedBlockingQueue<List<Float>> dataQueue) throws FileNotFoundException {
+    public STLAsciiReader(File file, BlockingQueue<List<Float>> dataQueue) throws FileNotFoundException {
         this(file);
         this.dataQueue = dataQueue;
     }
@@ -119,5 +120,8 @@ public class STLAsciiReader extends BufferedReader implements STLReader, Runnabl
     @Override
     public void run() {
         this.readTriangleData();
+        List<Float> end = new ArrayList<>();
+        end.add(null);
+        this.dataQueue.add(end);
     }
 }

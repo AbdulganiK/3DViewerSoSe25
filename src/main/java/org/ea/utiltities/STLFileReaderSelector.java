@@ -9,29 +9,36 @@ import org.ea.exceptions.STLReaderException;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * Selects appropriate STLReader implementation based on file content.
  */
 public class STLFileReaderSelector {
+
     /**
-     * Selects an STLReader instance for the given file.
+     * Selects an STLReader instance for the given file, with optional queue.
      *
-     * @param file the STL file to read
-     * @return STLReader instance (ASCII or Byte reader)
-     *
-     * @precondition file != null && file.exists() && file.isFile()
-     * @postcondition returns a valid STLReader or exits on error
+     * @param file              the STL file to read
+     * @param triangleDataQueue optional queue for passing triangle data
+     * @return STLReader instance (ASCII or Byte), or exits on error
      */
-    public static STLReader selectReader(File file) {
+    public STLReader selectReader(File file, BlockingQueue<List<Float>> triangleDataQueue) {
         try {
-            STLReader stlAsciiReader = new STLAsciiReader(file);
-            if (stlAsciiReader.readHeader().contains(GeometricConstants.SOLID)) {
-                Logger.info(Messages.STARTED_READING_STL_ASCII);
-                return stlAsciiReader;
+            STLReader testReader = new STLAsciiReader(file); // Zum Header prüfen
+            boolean isAscii = testReader.readHeader().contains(GeometricConstants.SOLID);
+
+            Logger.info(isAscii ? Messages.STARTED_READING_STL_ASCII : Messages.STARTED_READING_STL_BYTE);
+
+            if (isAscii) {
+                return (triangleDataQueue != null)
+                        ? new STLAsciiReader(file, triangleDataQueue)
+                        : new STLAsciiReader(file);
             } else {
-                Logger.info(Messages.STARTED_READING_STL_BYTE);
-                return new STLByteReader(file);
+                return (triangleDataQueue != null)
+                        ? new STLByteReader(file, triangleDataQueue)
+                        : new STLByteReader(file);
             }
         } catch (STLReaderException | IOException e) {
             Logger.error(e.getMessage());
@@ -39,4 +46,12 @@ public class STLFileReaderSelector {
         }
         return null;
     }
+
+    /**
+     * Convenience overload: selects reader without a queue.
+     */
+    public STLReader selectReader(File file) {
+        return selectReader(file, null);
+    }
+
 }

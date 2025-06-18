@@ -7,7 +7,7 @@ import org.ea.exceptions.OffsetOutOfRangeException;
 import java.io.IOException;
 import java.util.List;
 
-public interface STLReader {
+public interface STLReader extends Runnable {
     public <T> List<T> readHeader() throws IOException, EndOfFileReachedException, OffsetOutOfRangeException;
     public <T> List<T> readTriangleData() throws IOException, EndOfFileReachedException, OffsetOutOfRangeException;
     default boolean isNotSTLFile(String fileName) {
