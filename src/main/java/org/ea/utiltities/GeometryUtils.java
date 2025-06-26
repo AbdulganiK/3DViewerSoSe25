@@ -1,11 +1,13 @@
 package org.ea.utiltities;
 
+import org.ea.constant.Arguments;
 import org.ea.constant.GeometricConstants;
-import org.ea.model.DefaultEdge;
-import org.ea.model.Edge3D;
-import org.ea.model.Polygon;
-import org.ea.model.Vertex;
+import org.ea.controller.PolyhedronController;
+import org.ea.exceptions.STLReaderException;
+import org.ea.model.*;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -64,6 +66,26 @@ public interface GeometryUtils {
 
         return edges;
     }
+
+    static Polyhedron createPolyhedronFromFile(String fileName) {
+        try {
+            return
+                    new PolyhedronFactory()
+                            .buildPolyhedron(
+                                    new TriangleFactory()
+                                            .buildTriangles(
+                                                    new STLFileReaderSelector()
+                                                            .selectReader(new File(fileName))
+                                                            .readTriangleData()));
+        } catch (STLReaderException | IOException e) {
+            Logger.error(e.getMessage());
+            System.exit(Arguments.EXIT_ERROR);
+        }
+        return  null;
+    }
+
+
+
 
 
 }

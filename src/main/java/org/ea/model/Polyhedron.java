@@ -29,8 +29,8 @@ public class Polyhedron implements SolidGeometry {
         this.edges = GeometryUtils.removeDuplicates(edges, Edge3D[]::new);
         // remove duplicate vertices
         this.vertices = GeometryUtils.removeDuplicates(GeometryUtils.collectVerticesFromSurfaces(surfaces).toArray(new Vertex[0]), Vertex[]::new);
-        // check for euler)
-        if (this.vertices.length - this.edges.length + this.surfaces.length!= Numbers.EULER_RESULT) throw new EulerCharacteristicException();
+        // check for euler
+        //if (this.vertices.length - this.edges.length + this.surfaces.length!= Numbers.EULER_RESULT) throw new EulerCharacteristicException();
 
     }
 

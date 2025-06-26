@@ -6,14 +6,15 @@ import org.ea.exceptions.STLReaderException;
 import org.ea.model.Triangle;
 import org.ea.utiltities.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
+
+import javafx.application.Application;
+import org.ea.view.STLViewerApplication;
 
 
-public class Main {
+public class Main extends STLViewerApplication {
 
     /**
      * Entry point of the program. Executes task 2 using the input file specified in the arguments.
@@ -28,9 +29,10 @@ public class Main {
      *
      * @param args The command-line arguments passed to the program.
      */
-    public static void main(String[] args){
-        doTask2(args[Arguments.FILE_NAME_ARGUMENT]);
+    public static void main(String[] args) {
+        Application.launch(args);
     }
+
 
     /**
      * @param fileName
@@ -38,7 +40,7 @@ public class Main {
      * @precondition Valid triangle file needs to exist
      * @postcondition Triangles sorted by area in increasing order
      */
-    private static Triangle[] doTask2(String fileName) {
+    public static Triangle[] doTask2(String fileName) {
 
         try {
             return new PolyhedronController(
@@ -75,6 +77,8 @@ public class Main {
                 .findFirst()
                 .ifPresent(factory -> Logger.info(String.valueOf(factory.getThreadedArea())));
     }
+
+
 
 
 }
