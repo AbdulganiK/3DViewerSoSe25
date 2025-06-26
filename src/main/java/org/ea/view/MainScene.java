@@ -1,11 +1,12 @@
 package org.ea.view;
 
 import javafx.application.Platform;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import org.ea.model.Polyhedron;
 import org.ea.utiltities.GeometryUtils;
@@ -24,24 +25,41 @@ import java.io.File;
  */
 public final class MainScene extends Scene {
 
-    private final BorderPane rootPane;
-    private final ModelScene modelSubScene;      // 3-D-Viewport als SubScene
+    private final BorderPane root;
+    private final ModelScene modelSubScene;
+    private final ModelControlPane modelControlPane;
 
-    public MainScene(double width, double height, Polyhedron model) {
-        /* BorderPane als Root – Menü oben, 3-D in der Mitte */
-        super(new BorderPane(), width, height);
-        rootPane = (BorderPane) getRoot();
+    public MainScene(double w, double h, Polyhedron model) {
+        super(new BorderPane(), w, h);
+        root = (BorderPane) getRoot();
 
-        /* 3-D-SubScene in einen zentrierenden StackPane-Container */
-        modelSubScene = new ModelScene(width, height - 30, model);
-        StackPane center = new StackPane(modelSubScene);
-        center.setAlignment(Pos.CENTER);
+        /* 3-D-Viewport */
+        modelSubScene = new ModelScene(w, h, model);
 
-        /* Layout zusammenbauen */
-        rootPane.setTop(createMenuBar());
-        rootPane.setCenter(center);
-        rootPane.setStyle("-fx-background-color:#f0f0f0;");
+        /* ── Zentraler Layer-Stack ─────────────────────────────── */
+        MenuBar menuBar = createMenuBar();            // ❶ altes Menü behalten
+
+        this.modelControlPane = new ModelControlPane();   // Panel
+        this.modelControlPane.setVisible(false);
+
+        StackPane center = new StackPane(modelSubScene, this.modelControlPane);        // 3-D ganz unten
+        StackPane.setAlignment(this.modelControlPane, Pos.CENTER_RIGHT);
+        StackPane.setMargin(this.modelControlPane, new Insets(18, 0, 0, 0));  // ⬅ 10 px Abstand von rechts
+
+        center.getChildren().add(menuBar);                     // ❷ Menü darüber
+        StackPane.setAlignment(menuBar, Pos.TOP_LEFT);         // Ausrichtung
+        menuBar.setMaxWidth(Double.MAX_VALUE);                 // volle Breite
+
+        /* Alles zusammensetzen */
+        root.setCenter(center);                       // oben im BorderPane bleibt jetzt leer
+        root.setStyle("-fx-background-color:#f0f0f0;");
     }
+
+    public ModelControlPane getModelControlPane() {
+        return modelControlPane;
+    }
+
+
 
     /* ====================================================================== */
     /* Menü‐Leiste (Logik unverändert)                                        */

@@ -41,7 +41,7 @@ public class StageController {
 
         /* ---------- Controller für 3-D-Viewport ---------- */
         MainSceneController ctrl =
-                new MainSceneController(mainScene.getModelSubScene()); // SubScene!
+                new MainSceneController(mainScene); // SubScene!
 
         ctrl.handleSceneInterAction();          // Hotkeys / Click-Highlight usw.
 
