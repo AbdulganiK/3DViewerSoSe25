@@ -34,6 +34,14 @@ public final class ModelControlPane extends BorderPane {
         return moveBtn.isSelected() ? ManipulationMode.MOVE : ManipulationMode.ROTATE;
     }
 
+    public ToggleButton getMoveBtn() {
+        return moveBtn;
+    }
+
+    public ToggleButton getRotateBtn() {
+        return rotateBtn;
+    }
+
     public ColorPicker getColorPicker() { return colorPicker; }
 
     public Slider getOpacitySlider()   { return opacitySlider; }
@@ -57,7 +65,7 @@ public final class ModelControlPane extends BorderPane {
         ToggleGroup modeGroup = new ToggleGroup();
         moveBtn.setToggleGroup(modeGroup);
         rotateBtn.setToggleGroup(modeGroup);
-        moveBtn.setSelected(true);
+        moveBtn.setSelected(false);
         HBox modeBox = new HBox(10, moveBtn, rotateBtn);
         modeBox.setAlignment(Pos.CENTER_LEFT);
 

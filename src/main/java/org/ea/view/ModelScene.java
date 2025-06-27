@@ -26,6 +26,7 @@ public final class ModelScene extends SubScene {          // Scene → SubScene
     private final Rotate rotY = new Rotate(0, Rotate.Y_AXIS);
     private final GlobalAxes3D axes;
 
+
     private Node meshView;                    // aktuell geladenes STL-Mesh
 
     public ModelScene(double w, double h, Polyhedron model) {
@@ -47,13 +48,14 @@ public final class ModelScene extends SubScene {          // Scene → SubScene
         cam.setFarClip(10_000);
 
         Lights.addDefaultLights(world);
-        enableMouseOrbit();
+        //enableMouseOrbit();
 
         if (model != null) {
             Node mesh = new MeshFactory().buildMeshView(model.getSurfaces());
             setMesh(mesh);
         }
     }
+
 
     /* ----------- öffentlich ----------- */
 
