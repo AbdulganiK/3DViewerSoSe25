@@ -52,6 +52,15 @@ public final class MeshController {
         translate.setZ(translate.getZ() + dz);
     }
 
+    public void moveBy(String axis, double offset) {
+        switch (axis.toUpperCase()) {
+            case "X" -> translate.setX(translate.getX() + offset);
+            case "Y" -> translate.setY(translate.getY() + offset);
+            case "Z" -> translate.setZ(translate.getZ() + offset);
+            default   -> throw new IllegalArgumentException("Axis must be X, Y or Z");
+        }
+    }
+
     /**
      * Sets absolute Euler angles (deg).
      */

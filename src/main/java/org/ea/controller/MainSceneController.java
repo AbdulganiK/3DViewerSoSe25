@@ -224,15 +224,18 @@ public class MainSceneController {
         moveGizmo.setOnMouseDragged(e -> {
             if (!moveBtn.isSelected() || activeAxis.isEmpty()) return;
 
-            double dx = e.getSceneX() - lastMouseX;   // Maus­bewegung X-Pixel
-            double dy = e.getSceneY() - lastMouseY;   // Maus­bewegung Y-Pixel
-            double s  = 0.09;                         // Empfindlichkeit
+            double dx = e.getSceneX() - lastMouseX;
+            double dy = e.getSceneY() - lastMouseY;
+            double s  = 0.09;                  // Empfindlichkeit
 
-            switch (activeAxis) {
-                case "X" -> meshController.moveBy( dx * s,  0,       0);   // links/rechts
-                case "Y" -> meshController.moveBy( 0,      -dy * s,  0);   // hoch/runter
-                case "Z" -> meshController.moveBy( 0,       0,      -dy * s); // vor/zurück
-            }
+            double delta = switch (activeAxis) {
+                case "X" ->  dx * s;           // links / rechts
+                case "Y" -> -dy * s;           // hoch / runter  (Screen-Y invertiert)
+                case "Z" -> -dy * s;           // vor / zurück   (einfach an Y gekoppelt)
+                default   -> 0;
+            };
+            meshController.moveBy(activeAxis, delta);  // neue Achsen-Variante
+
             storeLastMousePos(e);
             updateGizmoPositions();
         });
