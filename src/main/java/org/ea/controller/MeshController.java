@@ -43,6 +43,28 @@ public final class MeshController {
         rotZ.setAngle(rotZ.getAngle() + dRoll);
     }
 
+
+    /**
+     * Rotiert das Objekt um die angegebene Achse um den gegebenen Winkel (in Grad).
+     * @param axis Die Achse, um die rotiert werden soll ('X', 'Y' oder 'Z').
+     * @param degrees Der Rotationswinkel in Grad.
+     */
+    public void rotateBy(String axis, double degrees) {
+        switch (axis.toUpperCase()) {
+            case "X":
+                rotX.setAngle(rotX.getAngle() + degrees);
+                break;
+            case "Y":
+                rotY.setAngle(rotY.getAngle() + degrees);
+                break;
+            case "Z":
+                rotZ.setAngle(rotZ.getAngle() + degrees);
+                break;
+            default:
+                throw new IllegalArgumentException("Ungültige Achse: " + axis + " (erlaubt: X, Y, Z)");
+        }
+    }
+
     /**
      * Adds the given deltas to the current translation.
      */

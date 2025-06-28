@@ -10,6 +10,7 @@ import org.ea.view.MainScene;
 public class StageController {
     private final Stage mainStage;
     private final Application.Parameters parameters;
+    private MainSceneController ctrl;
 
     public StageController(Stage stage, Application.Parameters parameters) {
         this.mainStage = stage;
@@ -40,7 +41,7 @@ public class StageController {
         );
 
         /* ---------- Controller für 3-D-Viewport ---------- */
-        MainSceneController ctrl =
+        ctrl =
                 new MainSceneController(mainScene); // SubScene!
 
         ctrl.handleSceneInterAction();          // Hotkeys / Click-Highlight usw.
@@ -49,6 +50,9 @@ public class StageController {
         this.startScene(mainScene);             // ← jetzt MainScene, nicht ModelScene
     }
 
+    public MainSceneController getMainSceneController() {
+        return ctrl;
+    }
 
     public void startScene(Scene scene) {
         this.getMainStage().setScene(scene);

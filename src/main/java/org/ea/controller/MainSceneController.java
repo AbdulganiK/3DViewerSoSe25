@@ -50,7 +50,7 @@ public class MainSceneController {
     public MainSceneController(MainScene mainScene) { this.mainScene = mainScene; }
 
     /* ------------------------------------------------ Bequeme Getter */
-    private MainScene  getMainScene()  { return mainScene; }
+    public MainScene  getMainScene()  { return mainScene; }
     private ModelScene getModelScene() { return mainScene.getModelSubScene(); }
     private MeshView   getMeshView()   {
         ModelScene ms = getModelScene(); return (ms == null) ? null : (MeshView) ms.getMeshView();
@@ -392,4 +392,6 @@ public class MainSceneController {
         m.getFaces().setAll(faces);
         return m;
     }
+
+
 }

@@ -14,24 +14,29 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <dependencies>
-           <!-- JavaFX Modules -->
-           <dependency>
-             <groupId>org.openjfx</groupId>
-             <artifactId>javafx-controls</artifactId>
-             <version>24</version>
-           </dependency>
-           <dependency>
-             <groupId>org.openjfx</groupId>
-             <artifactId>javafx-fxml</artifactId>
-             <version>24</version>
-           </dependency>
-           <!-- MaterialFX -->
-           <dependency>
-             <groupId>io.github.palexdev</groupId>
-             <artifactId>materialfx</artifactId>
-             <version>11.17.0</version>
-           </dependency>
-         </dependencies>
+        <!-- JavaFX Modules -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>24</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
+            <version>24</version>
+        </dependency>
+        <!-- MaterialFX -->
+        <dependency>
+            <groupId>io.github.palexdev</groupId>
+            <artifactId>materialfx</artifactId>
+            <version>11.17.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.10.1</version>
+        </dependency>
+    </dependencies>
 
 
 </project>
