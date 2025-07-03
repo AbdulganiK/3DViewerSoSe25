@@ -9,21 +9,51 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Objects;
 
+/**
+ * A simple TCP server that receives JSON-encoded transformation commands
+ * and delegates them to a mesh controller for 3D model manipulation.
+ *
+ * @precondition The given StageController must be initialized with a valid scene.
+ * @postcondition The server listens for incoming connections and executes transform commands.
+ */
 public class Server implements Runnable {
+
     private int port;
     private StageController controller;
 
+    /**
+     * Creates a server with the specified port and stage controller.
+     *
+     * @param port the port number to listen on
+     * @param controller the application's stage controller
+     * @precondition port > 0 && controller != null
+     * @postcondition The server is ready to accept socket connections
+     */
     public Server(int port, StageController controller) {
         this.port = port;
         this.controller = controller;
     }
 
+    /**
+     * Creates a server using the default port (9000).
+     *
+     * @param controller the application's stage controller
+     * @precondition controller != null
+     * @postcondition The server is initialized with port 9000
+     */
     public Server(StageController controller) {
         this(9000, controller);
     }
 
+    /**
+     * Handles input from a connected client socket. Messages must be JSON-encoded.
+     *
+     * @param socket the connected client socket
+     * @throws IOException if an I/O error occurs
+     * @precondition socket != null and connected
+     * @postcondition Processes and executes transformation commands
+     */
     private void handleNetworkInput(Socket socket) throws IOException {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
             Gson gson = new Gson();
@@ -42,6 +72,13 @@ public class Server implements Runnable {
         }
     }
 
+    /**
+     * Creates a mesh controller based on the current scene managed by the stage controller.
+     *
+     * @return a {@link MeshController} instance tied to the current mesh view
+     * @precondition controller is initialized with a valid scene
+     * @postcondition A mesh controller is returned for transformation operations
+     */
     private MeshController createMeshController() {
         return new MeshController(
                 this.controller.getMainSceneController()
@@ -51,6 +88,14 @@ public class Server implements Runnable {
         );
     }
 
+    /**
+     * Interprets and delegates a transformation command to the mesh controller.
+     *
+     * @param meshController the controller to apply transformations
+     * @param msg the received transformation message
+     * @precondition msg != null and contains valid command
+     * @postcondition The corresponding transformation is applied
+     */
     private void handleTransformCommand(MeshController meshController, TransformMessage msg) {
         switch (msg.getCommand().toLowerCase()) {
             case "rotate" ->
@@ -62,15 +107,18 @@ public class Server implements Runnable {
         }
     }
 
-
-
-
+    /**
+     * Starts the server and continuously listens for incoming client connections.
+     *
+     * @precondition Server is properly configured and port is available
+     * @postcondition Accepts client connections and processes incoming messages
+     */
     @Override
     public void run() {
         try (ServerSocket ss = new ServerSocket(port)) {
             System.out.println("Warte auf Verbindungsanfrage …");
             while (true) {
-                try (Socket client = ss.accept()) {   // accept blockiert bis ein Client kommt
+                try (Socket client = ss.accept()) {
                     System.out.println("Verbunden mit " + client.getInetAddress());
                     handleNetworkInput(client);
 

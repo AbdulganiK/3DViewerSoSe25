@@ -7,49 +7,86 @@ import javafx.scene.control.*;
 import javafx.scene.layout.*;
 
 /**
- * Overlay-Panel mit drei Bedienelement-Sektionen:
+ * Overlay panel providing 3D model controls:
  * <ul>
- *     <li>1️⃣ Bewegungsmodus (Bewegen / Rotieren – exklusiv)</li>
- *     <li>2️⃣ Farbwahl per {@link ColorPicker}</li>
- *     <li>3️⃣ Deckkraft‑Regler (0 % – 100 %)</li>
+ *     <li>Manipulation mode toggle (Move / Rotate)</li>
+ *     <li>Color selection via {@link ColorPicker}</li>
+ *     <li>Opacity adjustment slider</li>
  * </ul>
- * Größe, Farbe und Schatten des Panels bleiben unverändert.
+ *
+ *
+ * @precondition JavaFX platform initialized
+ * @postcondition Interactive control pane for model adjustments is created
  */
 public final class ModelControlPane extends BorderPane {
 
-    /* Öffentlich sichtbare API ------------------------------------------ */
+    /**
+     * Enum representing manipulation modes.
+     */
     public enum ManipulationMode { MOVE, ROTATE }
 
     private final ToggleButton moveBtn = new ToggleButton("Bewegen");
     private final ToggleButton rotateBtn = new ToggleButton("Rotieren");
     private final ColorPicker colorPicker = new ColorPicker();
-    private final Slider opacitySlider = new Slider(0.0, 1.0, 1.0); // 0 = komplett durchsichtig, 1 = voll sichtbar
+    private final Slider opacitySlider = new Slider(0.0, 1.0, 1.0);
 
+    /**
+     * Constructs the model control pane and builds the UI.
+     *
+     * @precondition JavaFX scene graph must be available
+     * @postcondition Control pane UI components initialized and ready
+     */
     public ModelControlPane() {
         buildUI();
     }
 
-    /* Getter ------------------------------------------------------------ */
+    /**
+     * Returns the current manipulation mode (MOVE or ROTATE).
+     *
+     * @return current mode
+     * @precondition None
+     * @postcondition Returns selected manipulation mode
+     */
     public ManipulationMode getManipulationMode() {
         return moveBtn.isSelected() ? ManipulationMode.MOVE : ManipulationMode.ROTATE;
     }
 
-    public ToggleButton getMoveBtn() {
-        return moveBtn;
-    }
+    /**
+     * @return move button
+     * @precondition None
+     * @postcondition Move button instance is returned
+     */
+    public ToggleButton getMoveBtn() { return moveBtn; }
 
-    public ToggleButton getRotateBtn() {
-        return rotateBtn;
-    }
+    /**
+     * @return rotate button
+     * @precondition None
+     * @postcondition Rotate button instance is returned
+     */
+    public ToggleButton getRotateBtn() { return rotateBtn; }
 
+    /**
+     * @return color picker
+     * @precondition None
+     * @postcondition Color picker instance is returned
+     */
     public ColorPicker getColorPicker() { return colorPicker; }
 
-    public Slider getOpacitySlider()   { return opacitySlider; }
+    /**
+     * @return opacity slider
+     * @precondition None
+     * @postcondition Opacity slider instance is returned
+     */
+    public Slider getOpacitySlider() { return opacitySlider; }
 
-    /* UI‑Aufbau --------------------------------------------------------- */
+    /**
+     * Builds the complete panel UI.
+     *
+     * @precondition JavaFX layout components available
+     * @postcondition Panel layout created and styled
+     */
     private void buildUI() {
 
-        /* Kopfzeile ---------------------------------------------------- */
         Label title = new Label("Model‑Steuerung");
         title.getStyleClass().add("panel-title");
 
@@ -61,7 +98,6 @@ public final class ModelControlPane extends BorderPane {
         header.setAlignment(Pos.CENTER_LEFT);
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        /* 1️⃣ Manipulations-Modus -------------------------------------- */
         ToggleGroup modeGroup = new ToggleGroup();
         moveBtn.setToggleGroup(modeGroup);
         rotateBtn.setToggleGroup(modeGroup);
@@ -69,11 +105,9 @@ public final class ModelControlPane extends BorderPane {
         HBox modeBox = new HBox(10, moveBtn, rotateBtn);
         modeBox.setAlignment(Pos.CENTER_LEFT);
 
-        /* 2️⃣ Farbwahl -------------------------------------------------- */
         HBox colorBox = new HBox(10, new Label("Farbe:"), colorPicker);
         colorBox.setAlignment(Pos.CENTER_LEFT);
 
-        /* 3️⃣ Deckkraft‑Slider ---------------------------------------- */
         opacitySlider.setShowTickMarks(true);
         opacitySlider.setShowTickLabels(true);
         opacitySlider.setMajorTickUnit(0.25);
@@ -83,7 +117,6 @@ public final class ModelControlPane extends BorderPane {
         HBox opacityBox = new HBox(10, new Label("Deckkraft:"), opacitySlider);
         opacityBox.setAlignment(Pos.CENTER_LEFT);
 
-        /* Gesamtes Content‑Layout ------------------------------------- */
         VBox content = new VBox(12,
                 modeBox,
                 new Separator(Orientation.HORIZONTAL),
@@ -94,14 +127,12 @@ public final class ModelControlPane extends BorderPane {
         content.setAlignment(Pos.TOP_LEFT);
         content.setPadding(new Insets(10));
 
-        /* Panel zusammenbauen ---------------------------------------- */
         setTop(header);
         setCenter(content);
         setPadding(new Insets(10));
         getStyleClass().add("overlay-panel");
         setMouseTransparent(false);
 
-        /* Basis‑Style (Größe, Farben) unverändert ------------------- */
         setStyle(
                 "-fx-background-color: white;" +
                         "-fx-border-color: #666666;" +
@@ -118,8 +149,11 @@ public final class ModelControlPane extends BorderPane {
     }
 
     /**
-     * Blendet das Panel ein oder aus.
-     * @param visible {@code true} → Panel anzeigen · {@code false} → Panel verbergen
+     * Shows or hides the control panel.
+     *
+     * @param visible {@code true} to show panel, {@code false} to hide it
+     * @precondition None
+     * @postcondition Panel visibility is updated accordingly
      */
     public void setPanelVisibility(boolean visible) {
         setVisible(visible);

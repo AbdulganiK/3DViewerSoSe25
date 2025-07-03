@@ -91,6 +91,7 @@ public class PolyhedronFactory implements Runnable {
             Vector originC = surface.getVertices()[GeometricConstants.THIRD_EDGE].subtract(GeometricConstants.ORIGIN);
             volume += (float) 1 / 6 * originA.dotProduct(originB.crossProduct(originC));
         }
+        Logger.info("Volume of Polyhedron is:", volume);
         return Math.abs(volume);
     }
 
@@ -108,6 +109,7 @@ public class PolyhedronFactory implements Runnable {
         for (Triangle surface : surfaces) {
             area += surface.getArea();
         }
+        Logger.info("Area of Polyhedron is:", area);
         return area;
     }
 

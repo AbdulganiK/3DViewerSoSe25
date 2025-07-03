@@ -1,6 +1,14 @@
 package org.ea.constant;
 
+/**
+ * <p>Defines constant message strings used for logging or console output during STL file processing and geometric operations.</p>
+ *
+ * @precondition None – this interface is intended only for exposing constant strings.
+ * @postcondition All messages are statically accessible and immutable.
+ */
 public interface Messages {
+
+
     String SUCCESSFUL_READ = "File was read successfully";
     String BUILDING_TRIANGLES_STARTED = "Building triangles started...";
     String BUILT_TRIANGLES = "%d were created";
@@ -15,11 +23,4 @@ public interface Messages {
     String BUILDING_POLYHEDRON_DONE = "Polyhedron was built";
     String STARTED_SORTING_SURFACES = "Sorting of the surfaces started...";
     String DONE_SORTING_SURFACES = "Sorting of the surfaces done";
-
-
-
-
-
-
-
 }

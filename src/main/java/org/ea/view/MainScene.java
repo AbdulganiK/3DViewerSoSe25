@@ -16,12 +16,14 @@ import org.ea.utiltities.PolyhedronFactory;
 import java.io.File;
 
 /**
- * Haupt-Fenster (Scene) der Anwendung.<br>
- * ▸ Top   = Menüleiste<br>
- * ▸ Center = 3-D-Viewport ( {@link ModelScene} – jetzt eine {@code SubScene} )<br>
- * <p>
- * Alle bisherigen Menü-Einträge und Platzhalter-Methoden bleiben unverändert –
- * es wurde nur der 3-D-Bereich auf {@code SubScene} umgestellt.
+ * Main application window scene.<br>
+ * ▸ Center = 3-D viewport ({@link ModelScene}, implemented as a {@code SubScene})<br>
+ *
+ * <p>This class constructs the main layout of the application, containing a 3D view,
+ * overlay controls, and a top menu for file operations and view configuration.</p>
+ *
+ * @precondition A valid {@link Polyhedron} must be provided.
+ * @postcondition A fully initialized {@link Scene} is constructed and ready for display.
  */
 public final class MainScene extends Scene {
 
@@ -29,56 +31,67 @@ public final class MainScene extends Scene {
     private final ModelScene modelSubScene;
     private final ModelControlPane modelControlPane;
 
+    /**
+     * Constructs a new MainScene with the given dimensions and model.
+     *
+     * @param w      the width of the scene
+     * @param h      the height of the scene
+     * @param model  the 3D model to be displayed
+     *
+     * @precondition {@code w > 0 && h > 0 && model != null}
+     * @postcondition Main scene is fully constructed with menu, 3D view, and control pane
+     */
     public MainScene(double w, double h, Polyhedron model) {
         super(new BorderPane(), w, h);
         root = (BorderPane) getRoot();
 
-        /* 3-D-Viewport */
+        // 3-D viewport
         modelSubScene = new ModelScene(w, h, model);
 
-        /* ── Zentraler Layer-Stack ─────────────────────────────── */
-        MenuBar menuBar = createMenuBar();            // ❶ altes Menü behalten
-
-        this.modelControlPane = new ModelControlPane();   // Panel
+        MenuBar menuBar = createMenuBar();
+        this.modelControlPane = new ModelControlPane();
         this.modelControlPane.setVisible(false);
 
-        StackPane center = new StackPane(modelSubScene, this.modelControlPane);        // 3-D ganz unten
+        StackPane center = new StackPane(modelSubScene, this.modelControlPane);
         StackPane.setAlignment(this.modelControlPane, Pos.CENTER_RIGHT);
-        StackPane.setMargin(this.modelControlPane, new Insets(18, 0, 0, 0));  // ⬅ 10 px Abstand von rechts
+        StackPane.setMargin(this.modelControlPane, new Insets(18, 0, 0, 0));
 
-        center.getChildren().add(menuBar);                     // ❷ Menü darüber
-        StackPane.setAlignment(menuBar, Pos.TOP_LEFT);         // Ausrichtung
-        menuBar.setMaxWidth(Double.MAX_VALUE);                 // volle Breite
+        center.getChildren().add(menuBar);
+        StackPane.setAlignment(menuBar, Pos.TOP_LEFT);
+        menuBar.setMaxWidth(Double.MAX_VALUE);
 
-        /* Alles zusammensetzen */
-        root.setCenter(center);                       // oben im BorderPane bleibt jetzt leer
+        root.setCenter(center);
         root.setStyle("-fx-background-color:#f0f0f0;");
     }
 
+    /**
+     * Returns the side control pane for model manipulation.
+     *
+     * @return the model control pane
+     * @precondition None
+     * @postcondition Caller receives non-null reference to control pane
+     */
     public ModelControlPane getModelControlPane() {
         return modelControlPane;
     }
 
-
-
-    /* ====================================================================== */
-    /* Menü‐Leiste (Logik unverändert)                                        */
-    /* ====================================================================== */
-
+    /**
+     * Creates the top menu bar of the scene with file and view operations.
+     *
+     * @return configured {@link MenuBar}
+     * @precondition None
+     * @postcondition Menu bar with functional event handlers is returned
+     */
     private MenuBar createMenuBar() {
         MenuBar menuBar = new MenuBar();
 
-        /* Datei ------------------------------------------------------------- */
         Menu fileMenu = new Menu("Datei");
         MenuItem loadItem = new MenuItem("Modell laden …");
         MenuItem exitItem = new MenuItem("Beenden");
-        loadItem.setOnAction(e -> loadModel());          // Platzhalter
+        loadItem.setOnAction(e -> loadModel());
         exitItem.setOnAction(e -> Platform.exit());
-        fileMenu.getItems().addAll(loadItem,
-                new SeparatorMenuItem(),
-                exitItem);
+        fileMenu.getItems().addAll(loadItem, new SeparatorMenuItem(), exitItem);
 
-        /* Ansicht ----------------------------------------------------------- */
         Menu viewMenu = new Menu("Ansicht");
         MenuItem resetView = new MenuItem("Ansicht zurücksetzen");
         CheckMenuItem axesToggle = new CheckMenuItem("Achsen anzeigen");
@@ -86,22 +99,22 @@ public final class MainScene extends Scene {
         resetView.setOnAction(e -> modelSubScene.resetView());
         viewMenu.getItems().addAll(resetView, axesToggle);
 
-        /* Hilfe ------------------------------------------------------------- */
         Menu helpMenu = new Menu("Hilfe");
         MenuItem aboutItem = new MenuItem("Über");
-        aboutItem.setOnAction(e -> showAboutDialog());   // Platzhalter
+        aboutItem.setOnAction(e -> showAboutDialog());
         helpMenu.getItems().add(aboutItem);
 
         menuBar.getMenus().addAll(fileMenu, viewMenu, helpMenu);
         return menuBar;
     }
 
-    /* ====================================================================== */
-    /* Platzhalter-Dialoge – Logik bleibt unverändert                         */
-    /* ====================================================================== */
-
+    /**
+     * Opens a file chooser dialog and loads a selected STL model.
+     *
+     * @precondition File must exist and be a valid STL format.
+     * @postcondition Selected model is loaded and rendered in the 3D viewport.
+     */
     private void loadModel() {
-        /* ── einfacher Datei-Dialog ───────────────────────────── */
         FileChooser chooser = new FileChooser();
         chooser.setTitle("STL-Datei öffnen");
         chooser.getExtensionFilters().addAll(
@@ -109,21 +122,23 @@ public final class MainScene extends Scene {
                 new FileChooser.ExtensionFilter("Alle Dateien", "*.*")
         );
 
-        /* Dialog anzeigen; Fensterreferenz = aktuelle Stage */
         File stlFile = chooser.showOpenDialog(getWindow());
 
-        /* Bis hierher nur den File wählen – Einlesen folgt später */
         if (stlFile != null) {
             System.out.println("Gewählte Datei: " + stlFile.getAbsolutePath());
             Polyhedron model = GeometryUtils.createPolyhedronFromFile(stlFile.getAbsolutePath());
-            // Model neusetzen:
             this.getModelSubScene().setMesh(new MeshFactory().buildMeshView(model.getSurfaces()));
-
         } else {
             System.out.println("Auswahl abgebrochen.");
         }
     }
 
+    /**
+     * Displays an information dialog about the application.
+     *
+     * @precondition None
+     * @postcondition Dialog is shown and dismissed upon user confirmation.
+     */
     private void showAboutDialog() {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Über diese Anwendung");
@@ -132,6 +147,14 @@ public final class MainScene extends Scene {
         alert.showAndWait();
     }
 
-    /* Getter – unverändert -------------------------------------------------- */
-    public ModelScene getModelSubScene() { return modelSubScene; }
+    /**
+     * Returns the embedded 3-D model subscene.
+     *
+     * @return {@link ModelScene} component containing 3-D model
+     * @precondition None
+     * @postcondition Non-null {@code SubScene} object returned
+     */
+    public ModelScene getModelSubScene() {
+        return modelSubScene;
+    }
 }

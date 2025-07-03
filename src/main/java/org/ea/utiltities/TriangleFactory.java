@@ -11,8 +11,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+
 /**
  * Factory class responsible for constructing Triangle objects from raw float data.
+ *
+ * @precondition Input data must follow the 12-float triangle format
+ * @postcondition Triangles are constructed and optionally pushed to output queue
  */
 public class TriangleFactory implements Runnable {
     private BlockingQueue<List<Float>> dataQueue;
@@ -21,12 +25,13 @@ public class TriangleFactory implements Runnable {
     private final int FLOAT_AMOUNT_VERTEX = 3;
     private final int FLOAT_AMOUNT_TRIANGLE = 12;
 
-
     /**
      * Constructs a TriangleFactory with the given queues.
      *
-     * @param dataQueue      queue containing raw triangle data
-     * @param triangleQueue  queue for storing generated Triangle objects
+     * @param dataQueue queue containing raw triangle data
+     * @param triangleQueue queue for storing generated Triangle objects
+     * @precondition dataQueue and triangleQueue must not be null
+     * @postcondition TriangleFactory is initialized with both queues
      */
     public TriangleFactory(BlockingQueue<List<Float>> dataQueue, BlockingQueue<Triangle> triangleQueue) {
         this.dataQueue = dataQueue;
@@ -35,6 +40,9 @@ public class TriangleFactory implements Runnable {
 
     /**
      * Default constructor.
+     *
+     * @precondition None
+     * @postcondition TriangleFactory is initialized with no queues
      */
     public TriangleFactory() {
     }
@@ -94,6 +102,13 @@ public class TriangleFactory implements Runnable {
         return null;
     }
 
+    /**
+     * Returns the list of constructed Triangle objects.
+     *
+     * @return list of Triangle objects
+     * @precondition Triangles must have been built before
+     * @postcondition List is returned, may be empty
+     */
     public List<Triangle> getTriangles() {
         return triangles;
     }
@@ -108,22 +123,11 @@ public class TriangleFactory implements Runnable {
      * @postcondition returns a non-negative double representing the area
      */
     public double calculateArea(Edge3D[] edges) {
-        double area;
-
-        // getting direction of edges
         Vector dir1 = edges[GeometricConstants.FIRST_EDGE].getDirection();
         Vector dir2 = edges[GeometricConstants.SECOND_EDGE].getDirection();
-
-        // calculating crossproduct
         Vector crossProduct = dir1.crossProduct(dir2);
-
-        // length of crossproduct equals to the area of the parallelogramm
         double parallelogramArea = crossProduct.length();
-
-        // diving parallelogramAre by 2 to get the area of triangle
-        area = parallelogramArea / GeometricConstants.HALF_OF_PARALLELOGRAM;
-
-        return area;
+        return parallelogramArea / GeometricConstants.HALF_OF_PARALLELOGRAM;
     }
 
     /**
@@ -136,11 +140,14 @@ public class TriangleFactory implements Runnable {
      * @postcondition returns a positive double representing the perimeter
      */
     public double calculatePerimeter(Edge3D[] edges) {
-        return edges[GeometricConstants.FIRST_EDGE].getLength() + edges[GeometricConstants.SECOND_EDGE].getLength() + edges[GeometricConstants.THIRD_EDGE].getLength();
+        return edges[GeometricConstants.FIRST_EDGE].getLength()
+                + edges[GeometricConstants.SECOND_EDGE].getLength()
+                + edges[GeometricConstants.THIRD_EDGE].getLength();
     }
 
     /**
      * Thread run method that consumes triangle data and produces Triangle objects.
+     * Adds a poison pill at the end of the queue to signal completion.
      *
      * @precondition dataQueue and triangleQueue must be initialized
      * @postcondition triangleQueue contains all built triangles and a poison pill
@@ -148,38 +155,36 @@ public class TriangleFactory implements Runnable {
     @Override
     public void run() {
         if (this.dataQueue == null) {
-            return; // Queue ist null → Abbruch
+            return;
         }
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
-                List<Float> triangleData = this.dataQueue.take(); // Ein Element holen
-
-                // Prüfe auf End-Signal (null oder leere Liste)
+                List<Float> triangleData = this.dataQueue.take();
                 if (triangleData.get(0) == null) {
-                    break; // Beende die Schleife
+                    break;
                 }
-
-                // Erstelle das Dreieck und füge es hinzu
                 Triangle triangle = this.buildTriangle(triangleData);
                 if (triangle != null) {
                     this.getTriangles().add(triangle);
                     this.triangleQueue.add(triangle);
                 }
-
             } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // Interrupt-Flag setzen
-                break; // Schleife beenden
+                Thread.currentThread().interrupt();
+                break;
             }
         }
 
-        // ACHTUNG GIFTIGE PILLE
         try {
-            this.triangleQueue.add(new Triangle(GeometryUtils.createEdgesFromVertices(PoisonPills.VERTICES_POISON_PILL), new DefaultVector(2,2,2), null, null));
+            this.triangleQueue.add(new Triangle(
+                    GeometryUtils.createEdgesFromVertices(PoisonPills.VERTICES_POISON_PILL),
+                    new DefaultVector(2, 2, 2),
+                    null,
+                    null
+            ));
         } catch (GeometryException e) {
             Logger.error(e.getMessage());
             System.exit(Arguments.EXIT_ERROR);
         }
-
     }
 }

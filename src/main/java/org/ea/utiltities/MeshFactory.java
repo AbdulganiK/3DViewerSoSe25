@@ -7,36 +7,57 @@ import org.ea.model.Vertex;
 
 import java.util.*;
 
+/**
+ * Utility class to construct a {@link MeshView} and its underlying {@link TriangleMesh}
+ * from an array of {@link Triangle} objects.
+ *
+ * @precondition Input triangles must be valid and contain well-formed vertices.
+ * @postcondition Returns a mesh suitable for rendering in JavaFX.
+ */
 public final class MeshFactory {
 
-    /** Öffentliche Fassade: liefert direkt ein gerendertes {@link MeshView}. */
+    /**
+     * Public API: Builds and returns a {@link MeshView} from the given triangles.
+     *
+     * @param triangles an array of Triangle objects
+     * @return a rendered MeshView object
+     * @precondition {@code triangles} is not null
+     * @postcondition MeshView is created and ready for rendering
+     */
     public MeshView buildMeshView(Triangle[] triangles) {
         return new MeshView(buildTriangleMesh(triangles));
     }
 
-    /** Kernmethode: erstellt nur das Mesh-Objekt. */
+    /**
+     * Core method: Builds only the {@link TriangleMesh} without wrapping it in a MeshView.
+     *
+     * @param triangles array of Triangle objects
+     * @return a TriangleMesh containing points and faces
+     * @precondition {@code triangles} is not null
+     * @postcondition A TriangleMesh is initialized with all vertices and faces
+     */
     public TriangleMesh buildTriangleMesh(Triangle[] triangles) {
         Objects.requireNonNull(triangles, "triangles");
 
-        // 1 Alle eindeutigen Vertex-Positionen sammeln
         Map<Vertex, Integer> vertexIndex = buildVertexIndex(triangles);
         float[] pointArray = buildPointArray(vertexIndex.keySet());
-
-        // 2 Face-Array anlegen (6 ints pro Dreieck: v0/t0, v1/t1, v2/t2)
         int[] faceArray = buildFaceArray(triangles, vertexIndex);
 
-        // 3 TriangleMesh initialisieren
         TriangleMesh mesh = new TriangleMesh();
         mesh.getPoints().addAll(pointArray);
-        mesh.getTexCoords().addAll(0, 0);          // Dummy-TexCoord
+        mesh.getTexCoords().addAll(0, 0);
         mesh.getFaces().addAll(faceArray);
 
         return mesh;
     }
 
-
     /**
-     * Erstellt eine geordnete Map ⟶ Index, um Vertex-Duplikate zu vermeiden.
+     * Builds an ordered vertex-to-index map to avoid duplicate vertex storage.
+     *
+     * @param triangles array of Triangle objects
+     * @return a LinkedHashMap of vertices to their assigned index
+     * @precondition {@code triangles} is not null and contains valid vertices
+     * @postcondition Map contains unique vertices mapped to indices
      */
     private static Map<Vertex, Integer> buildVertexIndex(Triangle[] triangles) {
         Map<Vertex, Integer> indexMap = new LinkedHashMap<>();
@@ -53,8 +74,12 @@ public final class MeshFactory {
     }
 
     /**
-     * Wandelt die Vertex-Menge in das von JavaFX erwartete float[] um.
-     * Reihenfolge bleibt erhalten (LinkedHashMap!).
+     * Converts the vertex collection into a float array as required by JavaFX.
+     *
+     * @param vertices collection of unique vertices
+     * @return array of floats in the order x, y, z, x, y, z...
+     * @precondition {@code vertices} must be a non-null collection
+     * @postcondition Float array of coordinates is returned, preserving order
      */
     private static float[] buildPointArray(Collection<Vertex> vertices) {
         float[] points = new float[vertices.size() * 3];
@@ -68,19 +93,25 @@ public final class MeshFactory {
     }
 
     /**
-     * Baut das Face-Array: 3 Vertex-Indizes × (VertexIndex, TexCoordIndex).
-     * TexCoordIndex ist immer 0, da keine Textur verwendet wird.
+     * Builds the face array for the mesh. Each triangle is represented by 3 vertex indices
+     * and corresponding dummy texture indices.
+     *
+     * @param triangles array of triangles
+     * @param vertexIndex map of vertices to indices
+     * @return array of face indices
+     * @precondition {@code triangles} and {@code vertexIndex} are valid and aligned
+     * @postcondition Returns an array of faces referencing unique vertices
      */
     private static int[] buildFaceArray(Triangle[] triangles,
                                         Map<Vertex, Integer> vertexIndex) {
 
-        int[] faces = new int[triangles.length * 6];  // 6 ints pro Dreieck
+        int[] faces = new int[triangles.length * 6];
         int f = 0;
 
         for (Triangle t : triangles) {
             for (Vertex v : t.getVertices()) {
-                faces[f++] = vertexIndex.get(v);  // Vertex-Index
-                faces[f++] = 0;                   // TexCoord-Index (Dummy)
+                faces[f++] = vertexIndex.get(v);
+                faces[f++] = 0;
             }
         }
         return faces;
